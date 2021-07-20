@@ -6,10 +6,12 @@ import {
   View,
   Button,
   Alert,
+  TouchableHighlight,
   TouchableOpacity,
   TextInput,
   FlatList,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
 const NewGame = ({ navigation }) => {
   const [teams, setTeams] = useState([]);
@@ -17,41 +19,84 @@ const NewGame = ({ navigation }) => {
 
   const addTeam = () => {
     if (team) {
-        for(teamL in teams){
-            if(team === teamL.name){
-                Alert.alert('Please add a team with a different name')
-                return
-            }
-        }
-      const id = teams.length + 1;
-      setTeams([...teams, { name: team, id: id }]);
+     // const id = teams.length + 1;
+      setTeams([...teams, team]);
+      setTeam("");
     }
+  };
+  const removeTeam = (name) => {
+    const newTeams = teams.filter(team => team != name)
+    setTeams(newTeams)
   };
   const onTeamChange = (team) => {
     setTeam(team);
   };
+  const teamCard = (name) => {
+    return (
+      <View style={styles.itemCard}>
+        <View style={styles.itemCardText}>
+          <Text>{name}</Text>
+        </View>
+        <TouchableOpacity
+          onPress={() => removeTeam(name)}
+          style={{ justifyContent: "center", alignItems: "center" }}
+        >
+          <AntDesign name="closecircle" size={24} color="black" />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+  const addButton = () =>
+    team
+      ? {
+          backgroundColor: "#000000",
+          height: 50,
+          width: 70,
+          borderRadius: 10,
+          justifyContent: "center",
+          alignItems: "center",
+        }
+      : {
+          backgroundColor: "#616160",
+          height: 50,
+          width: 70,
+          borderRadius: 10,
+          justifyContent: "center",
+          alignItems: "center",
+        };
+  const nextScreen = () => {
+    if(teams.length < 2) return Alert.alert('Please add at least 2 teams')
+    navigation.navigate('PlayersPerTeam', {teams: teams})
+  }
+  const NextButton = () => {
+    return (
+      <TouchableHighlight style={styles.nextButton} onPress={() => nextScreen()}>
+        <Text style={styles.buttonText}>Next</Text>
+      </TouchableHighlight>
+    )
+  }
   return (
     <View style={styles.container}>
-        <Text style={styles.header}>Add Your Teams</Text>
+      <Text style={styles.header}>Add Your Teams</Text>
       <View style={styles.input}>
         <TextInput
           style={styles.inputText}
           onChangeText={onTeamChange}
           value={team}
           placeholder="Team Name"
-          textAlign='center'
+          textAlign="center"
           caretHidden={true}
         />
-        <Button onPress={addTeam} title="Add" color="#000000" />
+        <TouchableHighlight onPress={addTeam} style={addButton()} disabled={team ? false : true}>
+          <Text style={{ color: "#ffffff" }}>Add</Text>
+        </TouchableHighlight>
       </View>
       <FlatList
         data={teams}
-        renderItem={({ item }) => <Text style={styles.item}>{item.name}</Text>}
-        keyExtractor={(team) => team.id.toString()}
+        renderItem={({ item }) => teamCard(item)}
+        keyExtractor={(team) => team.toString()}
       />
-      <TouchableOpacity style={styles.button} onPress={() => {}}>
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableOpacity>
+      <NextButton />
     </View>
   );
 };
@@ -70,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     margin: 10,
   },
-  button: {
+  nextButton: {
     color: "#ffffff",
     margin: 5,
     height: 55,
@@ -79,7 +124,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 5,
-    margin: 30
+    margin: 30,
   },
   buttonText: {
     fontWeight: "bold",
@@ -90,14 +135,27 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row",
-    margin: 10
+    margin: 10,
   },
   inputText: {
-      backgroundColor: "#ffffff",
-      
-      borderRadius: 10,
-      margin: 10,
-      height: 50,
-      width: "50%"
-  }
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    margin: 10,
+    height: 50,
+    width: "50%",
+  },
+  itemCard: {
+    justifyContent: "center",
+    flexDirection: "row",
+  },
+  itemCardText: {
+    backgroundColor: "#ffffff",
+    borderRadius: 10,
+    margin: 10,
+    height: 50,
+    width: 200,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
 });

@@ -26,7 +26,7 @@ const Home = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => {}}
+          onPress={() => {navigation.push('PlayersPerTeam', {teams: ['hvjhv', 'hgvuyf']})}}
         >
           <Text style={styles.buttonText}>Settings</Text>
         </TouchableOpacity>
