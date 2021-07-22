@@ -32,12 +32,7 @@ const PlayersPerTeam = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Text
-        style={{
-          color: "#000000",
-          fontSize: 30,
-          fontWeight: "bold",
-          margin: 20,
-        }}
+        style={styles.heading}
       >
         Players Per Team
       </Text>
@@ -69,4 +64,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
+  heading: {
+    color: "#000000",
+    fontSize: 30,
+    fontWeight: "bold",
+    margin: 20,
+  }
 });
