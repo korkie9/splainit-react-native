@@ -170,7 +170,7 @@ const Players = ({ route }) => {
       <FlatList
         data={players}
         renderItem={({ item }) => playerCard(item)}
-        keyExtractor={(player) => `${playerIndex.toString()}${teamIndex.toString()}`}
+        keyExtractor={(player) => player.name.toString()}
       />
       <NextButton />
     </View>
