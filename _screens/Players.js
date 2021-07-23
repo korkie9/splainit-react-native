@@ -8,9 +8,10 @@ import {
   TouchableHighlight,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
-const Players = ({ route }) => {
+const Players = ({ navigation, route }) => {
   const teamNames = route.params.teams;
   const playersPerTeam = route.params.playersPerTeam;
   const wordsPerPlayer = route.params.wordsPerPlayer;
@@ -37,7 +38,7 @@ const Players = ({ route }) => {
             borderTopLeftRadius: 5,
             borderBottomLeftRadius: 5,
             borderTopRightRadius: 2,
-            borderBottomRightRadius: 2
+            borderBottomRightRadius: 2,
           }}
         >
           <Text style={{ padding: 10 }}>{p.name}</Text>
@@ -63,64 +64,76 @@ const Players = ({ route }) => {
     if (teams.length < 2) return Alert.alert("Please add at least 2 teams");
     navigation.navigate("PlayersPerTeam", { teams: teams });
   };
-  const nextButtonStyle = () => 
-    next ? 
-    {
-      color: "#ffffff",
-      margin: 5,
-      height: 55,
-      width: "30%",
-      backgroundColor: "#000000",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: 5,
-      margin: 30,
-    } : {
-      color: "#ffffff",
-      margin: 5,
-      height: 55,
-      width: "30%",
-      backgroundColor: "#616160",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: 5,
-      margin: 30,
-    }
-  
+  const nextButtonStyle = () =>
+    next
+      ? {
+          color: "#ffffff",
+          margin: 5,
+          height: 55,
+          width: "30%",
+          backgroundColor: "#000000",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 5,
+          margin: 30,
+        }
+      : {
+          color: "#ffffff",
+          margin: 5,
+          height: 55,
+          width: "30%",
+          backgroundColor: "#616160",
+          alignItems: "center",
+          justifyContent: "center",
+          borderRadius: 5,
+          margin: 30,
+        };
+
   const NextButton = () => {
     return (
       <TouchableHighlight
         style={nextButtonStyle()}
         disabled={next ? false : true}
-        onPress={() => console.log(JSON.stringify(players))} ////////////////////////////Testing
+        onPress={() =>
+          navigation.navigate("Words", {
+            players: players,
+            wordsPerPlayer: wordsPerPlayer,
+          })
+        }
       >
         <Text style={styles.buttonText}>Next</Text>
       </TouchableHighlight>
     );
   };
   const addName = () => {
-    if (playerIndex !== playersPerTeam - 1) {
+    let nameAlreadyExists = null;
+    players.map((p) => {
+      if (p.name === playerText) nameAlreadyExists = true;
+    });
+    if (!nameAlreadyExists && playerIndex !== playersPerTeam - 1) {
       setPlayers([
         ...players,
         { name: playerText, teamName: teamNames[teamIndex] },
       ]);
       setPlayerIndex(playerIndex + 1);
-      setPlayerText('')
-    } else if (teamIndex !== teamNames.length - 1) {
+      setPlayerText("");
+    } else if (!nameAlreadyExists && teamIndex !== teamNames.length - 1) {
       setPlayers([
         ...players,
         { name: playerText, teamName: teamNames[teamIndex] },
       ]);
       setPlayerIndex(0);
       setTeamIndex(teamIndex + 1);
-      setPlayerText('')
-    } else {
+      setPlayerText("");
+    } else if (!nameAlreadyExists) {
       setPlayers([
         ...players,
         { name: playerText, teamName: teamNames[teamIndex] },
       ]);
       setNext(true);
-      setPlayerText('')
+      setPlayerText("");
+    } else {
+      Alert.alert("Please add a unique name");
     }
   };
   const addButtonStyle = () =>
@@ -141,32 +154,72 @@ const Players = ({ route }) => {
           justifyContent: "center",
           alignItems: "center",
         };
-  return (
+  const playerInputStyle = () => {
+    return {
+      backgroundColor: "#ffffff",
+      borderRadius: 10,
+      margin: 10,
+      height: 50,
+      width: "50%",
+    };
+  };
 
+  return (
     <View style={styles.container}>
-      <Text style={styles.header}>
-        {teamNames[teamIndex]} Add your players
-      </Text>
-      <View style={styles.input}>
-        <TextInput
-          style={styles.inputText}
-          onChangeText={onPlayerTextChange}
-          value={playerText}
-          placeholder="Player Name"
-          textAlign="center"
-          caretHidden={true}
-          editable={next ? false : true}
-        />
-        <TouchableHighlight
-          onPress={() => {
-            addName();
-          }}
-          style={addButtonStyle()}
-          disabled={playerText ? false : true}
-        >
-          <Text style={{ color: "#ffffff" }}>Add</Text>
-        </TouchableHighlight>
-      </View>
+      {next ? (
+        <Text style={styles.header}>Click Next</Text>
+      ) : (
+        <View style={{ flexDirection: "column" }}>
+          <Text
+            style={{
+              fontSize: 40,
+              fontWeight: "bold",
+              margin: 20,
+              marginTop: 30,
+              fontFamily: "serif",
+              textAlign: "center",
+            }}
+          >
+            {teamNames[teamIndex]}
+          </Text>
+          <Text
+            style={{
+              fontSize: 30,
+              fontWeight: "bold",
+              margin: 20,
+              marginTop: 0,
+              fontFamily: "serif",
+              textAlign: "center",
+            }}
+          >
+            Add your players
+          </Text>
+        </View>
+      )}
+      {!next ? (
+        <View style={styles.input}>
+          <TextInput
+            style={playerInputStyle()}
+            onChangeText={onPlayerTextChange}
+            value={playerText}
+            placeholder="Type Player's Name..."
+            textAlign="center"
+            caretHidden={true}
+            editable={next ? false : true}
+          />
+          <TouchableHighlight
+            onPress={() => {
+              addName();
+            }}
+            style={addButtonStyle()}
+            disabled={playerText ? false : true}
+          >
+            <Text style={{ color: "#ffffff" }}>Add</Text>
+          </TouchableHighlight>
+        </View>
+      ) : (
+        <View></View>
+      )}
       <FlatList
         data={players}
         renderItem={({ item }) => playerCard(item)}
@@ -189,7 +242,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     fontWeight: "bold",
-    margin: 10,
+    margin: 20,
+    marginTop: 30,
+    fontFamily: "serif",
+    textAlign: "center",
   },
   buttonText: {
     fontWeight: "bold",
@@ -202,13 +258,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     margin: 10,
   },
-  inputText: {
-    backgroundColor: "#ffffff",
-    borderRadius: 10,
-    margin: 10,
-    height: 50,
-    width: "50%",
-  },
+
   itemCard: {
     justifyContent: "center",
     alignItems: "center",

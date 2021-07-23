@@ -10,26 +10,32 @@ import {
 } from "react-native";
 
 const Home = ({ navigation }) => {
-
-    const newGame = () => {
-        navigation.push('NewGame')
-    }
+  const newGame = () => {
+    navigation.push("NewGame");
+  };
   return (
     <View style={styles.container}>
+      <TouchableOpacity style={styles.button} onPress={newGame}>
+        <Text style={styles.buttonText}>New Game</Text>
+      </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={newGame}
-        >
-          <Text style={styles.buttonText}>New Game</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {navigation.push('PlayersPerTeam', {teams: ['hvjhv', 'hgvuyf']})}}
-        >
-          <Text style={styles.buttonText}>Settings</Text>
-        </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          const ps = [
+            { name: "P1", teamName: "T1" },
+            { name: "P2", teamName: "T1" },
+            { name: "P3", teamName: "T2" },
+            { name: "P4", teamName: "T2" },
+          ]
+          navigation.navigate("Words", {
+            players: ps,
+            wordsPerPlayer: 1
+          });
+        }}
+      >
+        <Text style={styles.buttonText}>Settings</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -51,11 +57,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 5
+    borderRadius: 5,
   },
-  buttonText:{
+  buttonText: {
     fontWeight: "bold",
     fontSize: 30,
-    color: 'white'
-  }
+    color: "white",
+  },
 });

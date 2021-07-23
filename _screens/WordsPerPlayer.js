@@ -12,7 +12,11 @@ const WordsPerPlayer = ({ navigation, route }) => {
   const [teams, setTeams] = useState(route.params.teams);
   const [nums, setNums] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   const nextScreen = (number) => {
-    navigation.navigate("Players", { teams: teams, playersPerTeam: route.params.playersPerTeam, wordsPerPlayer: number });
+    navigation.navigate("Players", {
+      teams: teams,
+      playersPerTeam: route.params.playersPerTeam,
+      wordsPerPlayer: number,
+    });
   };
   const numberCard = (num) => {
     return (
@@ -31,16 +35,7 @@ const WordsPerPlayer = ({ navigation, route }) => {
   };
   return (
     <View style={styles.container}>
-      <Text
-        style={{
-          color: "#000000",
-          fontSize: 30,
-          fontWeight: "bold",
-          margin: 20,
-        }}
-      >
-        Words Per Player
-      </Text>
+      <Text style={styles.header}>Words Per Player</Text>
       <FlatList
         data={nums}
         renderItem={({ item }) => numberCard(item)}
@@ -68,5 +63,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     flexDirection: "row",
+  },
+  header: {
+    color: "#000000",
+    fontSize: 30,
+    fontWeight: "bold",
+    margin: 20,
+    marginTop: 30,
+    textAlign: 'center',
+    fontFamily: 'serif'
   },
 });

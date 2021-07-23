@@ -18,10 +18,16 @@ const NewGame = ({ navigation }) => {
   const [team, setTeam] = useState("");
 
   const addTeam = () => {
-    if (team) {
+    let teamExists = null
+    teams.map(t => {
+      if(t === team) teamExists = true
+    })
+    if (team && !teamExists) {
      // const id = teams.length + 1;
       setTeams([...teams, team]);
       setTeam("");
+    } else {
+      Alert.alert('Please add a unique team name')
     }
   };
   const removeTeam = (name) => {
@@ -83,7 +89,7 @@ const NewGame = ({ navigation }) => {
           style={styles.inputText}
           onChangeText={onTeamChange}
           value={team}
-          placeholder="Team Name"
+          placeholder="Type Team Name..."
           textAlign="center"
           caretHidden={true}
         />
@@ -113,7 +119,10 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 30,
     fontWeight: "bold",
-    margin: 10,
+    margin: 20,
+    marginTop: 30,
+    fontFamily: 'serif',
+    textAlign: 'center'
   },
   nextButton: {
     color: "#ffffff",

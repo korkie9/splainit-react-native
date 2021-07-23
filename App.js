@@ -6,6 +6,7 @@ import NewGame from "./_screens/NewGame"
 import Players from "./_screens/Players"
 import PlayersPerTeam from "./_screens/PlayersPerTeam"
 import WordsPerPlayer from "./_screens/WordsPerPlayer"
+import Words from "./_screens/Words"
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ const App = () => {
         <Stack.Screen name="Players" component={Players} options={{title: 'Add Players'}}/>
         <Stack.Screen name="PlayersPerTeam" component={PlayersPerTeam} options={{title: 'Number of Players Per Team'}}/>
         <Stack.Screen name="WordsPerPlayer" component={WordsPerPlayer} options={{title: 'Number of Words Per Player'}}/>
+        <Stack.Screen name="Words" component={Words} options={{title: 'Choose Your Words'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
