@@ -25,13 +25,16 @@ const Home = ({ navigation }) => {
           const ps = [
             { name: "P1", teamName: "T1" },
             { name: "P2", teamName: "T1" },
-            { name: "P3", teamName: "T2" },
+            { name: "P3", teamName: "T1" },
             { name: "P4", teamName: "T2" },
+            { name: "P5", teamName: "T2" },
+            { name: "P6", teamName: "T2" },
+            { name: "P7", teamName: "T3" },
+            { name: "P8", teamName: "T3" },
+            { name: "P9", teamName: "T3" },
           ]
-          navigation.navigate("Words", {
-            players: ps,
-            wordsPerPlayer: 1
-          });
+          const ws = ['w1', 'w1', 'w3', 'w4']
+          navigation.navigate('GamePlay', {words: ws, players: ps, noOfTeams: 3})
         }}
       >
         <Text style={styles.buttonText}>Settings</Text>

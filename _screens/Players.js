@@ -94,11 +94,13 @@ const Players = ({ navigation, route }) => {
       <TouchableHighlight
         style={nextButtonStyle()}
         disabled={next ? false : true}
-        onPress={() =>
+        onPress={() => {
           navigation.navigate("Words", {
             players: players,
             wordsPerPlayer: wordsPerPlayer,
+            noOfTeams: teamNames.length
           })
+        }
         }
       >
         <Text style={styles.buttonText}>Next</Text>

@@ -11,6 +11,7 @@ import {
 const Words = ({ navigation, route }) => {
   const wordsPerPlayer = route.params.wordsPerPlayer;
   const players = route.params.players;
+  const noOfTeams = route.params.noOfTeams
   const [words, setWords] = useState([]);
   const [playerIndex, setPlayerIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
@@ -90,9 +91,9 @@ const Words = ({ navigation, route }) => {
       <TouchableHighlight
         style={nextButtonStyle()}
         disabled={next ? false : true}
-        onPress={() =>
-          console.log(JSON.stringify(words), JSON.stringify(players))
-        }
+        onPress={() => {
+         navigation.navigate('GamePlay', {words: words, players: players, noOfTeams: noOfTeams})
+        }}
       >
         <Text style={styles.buttonText}>Start</Text>
       </TouchableHighlight>
