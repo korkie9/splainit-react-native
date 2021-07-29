@@ -18,6 +18,7 @@ const Words = ({ navigation, route }) => {
   const [wordCounter, setWordCounter] = useState(wordsPerPlayer);
   const [wordText, setWordText] = useState("");
   const [next, setNext] = useState(null); //To show button for next screen
+  const [ playersWithPartners, setPlayersWithPartners] = useState([])
 
   const addWord = () => {
     if (wordIndex !== wordsPerPlayer - 1) {
@@ -85,6 +86,45 @@ const Words = ({ navigation, route }) => {
       margin: 30,
     };
   };
+  const sortedPlayers = () => {
+    //Sort array of players into array of teams array
+    let playersPerTeam = 0;
+    let playerCounter = 0;
+    let teamSwap = [];
+    let tempTeams = [];
+    playersPerTeam = players.length / noOfTeams;
+    console.log(playersPerTeam);
+    for (let t = 0; t < noOfTeams; t++) {
+      for (let p = 0; p < playersPerTeam; p++) {
+        const plyr = players[playerCounter];
+        teamSwap.push(plyr);
+        playerCounter += 1;
+      }
+      tempTeams.push(teamSwap);
+      teamSwap = [];
+    }
+    //setTeams(tempTeams);
+    //Sort Players with partners
+    let tempPlayersWithPartners = [];
+    tempTeams.map((pteam, index) => {
+      pteam.map((pplayer, pindex) => {
+        if (!pteam[pindex + 1]) {
+          tempPlayersWithPartners.push({
+            name: pplayer.name,
+            teamName: pplayer.teamName,
+            partner: pteam[0].name,
+          });
+        } else {//Edit here
+          tempPlayersWithPartners.push({
+            name: pplayer.name,
+            teamName: pplayer.teamName,
+            partner: pteam[pindex + 1].name,
+          });
+        }
+      });
+    });
+    return tempPlayersWithPartners;
+  };
 
   const NextButton = () => {
     return next ? (
@@ -92,7 +132,8 @@ const Words = ({ navigation, route }) => {
         style={nextButtonStyle()}
         disabled={next ? false : true}
         onPress={() => {
-         navigation.navigate('GamePlay', {words: words, players: players, noOfTeams: noOfTeams})
+          const sortedplayers = sortedPlayers()
+         navigation.navigate('Round', {playersAndPartners: sortedplayers, words: words})
         }}
       >
         <Text style={styles.buttonText}>Start</Text>

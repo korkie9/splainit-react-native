@@ -34,7 +34,7 @@ const Home = ({ navigation }) => {
             { name: "P9", teamName: "T3" },
           ]
           const ws = ['w1', 'w1', 'w3', 'w4']
-          navigation.navigate('GamePlay', {words: ws, players: ps, noOfTeams: 3})
+          navigation.navigate('Words', {wordsPerPlayer: 2, players: ps, noOfTeams: 3})
         }}
       >
         <Text style={styles.buttonText}>Settings</Text>

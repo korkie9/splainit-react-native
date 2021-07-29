@@ -8,7 +8,8 @@ import PlayersPerTeam from "./_screens/PlayersPerTeam"
 import WordsPerPlayer from "./_screens/WordsPerPlayer"
 import Words from "./_screens/Words"
 import GamePlay from "./_screens/GamePlay"
-
+import Results from "./_screens/Results"
+import Round from "./_screens/Round"
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -26,6 +27,9 @@ const App = () => {
         <Stack.Screen name="WordsPerPlayer" component={WordsPerPlayer} options={{title: 'Number of Words Per Player'}}/>
         <Stack.Screen name="Words" component={Words} options={{title: 'Choose Your Words'}}/>
         <Stack.Screen name="GamePlay" component={GamePlay} options={{title: `'Splainit`}}/>
+        <Stack.Screen name="Round" component={Round} options={{title: `'Splainit`}}/>
+        <Stack.Screen name="Results" component={Results} options={{title: 'Results'}}/>
+
       </Stack.Navigator>
     </NavigationContainer>
   );
