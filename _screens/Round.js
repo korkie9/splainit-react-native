@@ -21,6 +21,7 @@ const Round = ({ navigation, route }) => {
   const [score, setScore] = useState(0);
   const [currentWordNumber, setCurrentWordNumber] = useState(0)
   const [gameCountDownInterval, setGameCountDownInterval] = useState()
+  const [gameCountDownTimeout, setGameCountDownTimeout] = useState()
   const [remainingWords, setRemainingWords] = useState(words)
 
   const startCountDownToGame = () => {
@@ -47,23 +48,37 @@ const Round = ({ navigation, route }) => {
     const interval = setInterval(() => {
       c -= 1;
       setCountDownCounter(c);
+      if(!remainingWords){
+        clearInterval(interval)
+        setPhase("resultsPhase");
+      }
       console.log(countDownCounter);
     }, 1000);
-    setTimeout(() => {
+    const timeout = setTimeout(() => {
       clearInterval(interval);
       setPhase("resultsPhase");
       console.log("Game count down stoped, results phase initiate");
     }, 30000);
+    setGameCountDownInterval(interval)
+    setGameCountDownTimeout(timeout)
   };
   const addPoint = () => {
-    setCurrentWordNumber(generateRandomIntegerInRange(0, remainingWords.length - 1))
+    //setCurrentWordNumber(generateRandomIntegerInRange(0, remainingWords.length - 1))
     setScore(score + 1);
-    const newWords = remainingWords.filter(word => !word)
+    const newWords = []
+    remainingWords.map((word, index) => {
+      if(index !== 0) {
+        newWords.push(word)
+      }
+    })
     console.log(newWords)
     setRemainingWords(newWords)
-    if(!newWords) {
+    if(!remainingWords[1]) {
+        console.log('remaining are words finished')
+        console.log(score)
         setPhase('resultsPhase')
         clearInterval(gameCountDownInterval)
+        clearTimeout(gameCountDownTimeout)
     }
   };
   const generateRandomIntegerInRange = (min, max) => {
@@ -121,7 +136,7 @@ const Round = ({ navigation, route }) => {
         </Text>
         <Text style={styles.headerGameText}>'splain</Text>
         <Text style={styles.headerText}>
-          {words[currentWordNumber]}
+          {remainingWords[0]}
         </Text>
         <Text style={styles.headerGameText}>
           to {playersAndPartners[splainerNumber].name}
@@ -140,7 +155,7 @@ const Round = ({ navigation, route }) => {
     return (
       <View style={styles.container}>
         <Text style={styles.headerText}>Final Score: {score}</Text>
-        <TouchableOpacity style={{ margin: 20 }} onPress={() => {}}>
+        <TouchableOpacity style={{ margin: 20 }} onPress={() => {console.log(score)}}>
           <Text style={styles.headerText}>Next</Text>
         </TouchableOpacity>
       </View>
