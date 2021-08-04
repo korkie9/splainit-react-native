@@ -13,7 +13,7 @@ const Results = ({ navigation, route }) => {
     const playersAndScores = route.params.playersAndScores
   return (
     <View style={styles.container}>
-        <Text>{playersAndScores}</Text>
+        <Text>{JSON.stringify(playersAndScores)}</Text>
     </View>
   );
 };
