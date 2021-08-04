@@ -105,24 +105,6 @@ const Round = ({ navigation, route }) => {
     setPhase("resultsPhase");
   };
   const startPassPhase = () => {
-    //edit this function
-    // //Start pass phase
-    // setRemainingWords(words);
-    // let teamAndScore = {};
-    // const tempScore = 0;
-    // const newTeamsAndScores = teamsAndScores
-    //   .map((team) => {
-    //     if (team.teamName === playersAndPartners[splainer].teamName) {
-    //       tempScore = team.score + score;
-    //     }
-    //     teamAndScore = {
-    //       teamName: playersAndPartners[splainer].teamName,
-    //       score: tempScore,
-    //     };
-    //   })
-    //   .filter((team) => team.teamName !== playersAndPartners[splainer].teamName)
-    //   .push(teamAndScore);
-    // setTeamsAndScores(newTeamsAndScores);
 
     //Set Scores Based on rounds
     let rOneScore = 0;
@@ -145,11 +127,6 @@ const Round = ({ navigation, route }) => {
           };
         }
       }
-      //  playersAndScores.map(player => {
-      //   if (player.name === playersAndPartners[splainerNumber].name) {
-      //     if (player.roundOneScore) rOneScore += player.roundOneScore;
-      //   }
-      // });
       const playerWithScoreRound2 = {
         name: playersAndPartners[splainerNumber].name,
         teamName: playersAndPartners[splainerNumber].teamName,
@@ -163,9 +140,6 @@ const Round = ({ navigation, route }) => {
         }
       }
       tempPlayersWithScores.push(playerWithScoreRound2)
-      // const newPlayersAndScores = playersAndScores
-      //   .filter((player) => playerWithScore.name !== player.name)
-      //   .push(playerWithScore);
       setPlayersAndScores(tempPlayersWithScores);
       console.log('players and scores: ', tempPlayersWithScores)
     }
@@ -176,12 +150,6 @@ const Round = ({ navigation, route }) => {
           if (player.roundTwoScore) rTwoScore += player.roundTwoScore;
         }
       }
-      // playersAndScores.map((player) => {
-      //   if (player.name === playersAndPartners[splainerNumber].name) {
-      //     if (player.roundOneScore) rOneScore += player.roundOneScore;
-      //     if (player.roundTwoScore) rTwoScore += player.roundTwoScore;
-      //   }
-      // });
       const playerWithScoreRound3 = {
         name: playersAndPartners[splainerNumber].name,
         teamName: playersAndPartners[splainerNumber].teamName,
@@ -195,9 +163,6 @@ const Round = ({ navigation, route }) => {
         }
       }
       tempPlayersWithScores.push(playerWithScoreRound3)
-      // const newPlayersAndScores = playersAndScores
-      //   .filter((player) => playerWithScore.name !== player.name)
-      //   .push(playerWithScore);
       setPlayersAndScores(tempPlayersWithScores);
       console.log('players and scores: ', tempPlayersWithScores)
     }
@@ -207,6 +172,7 @@ const Round = ({ navigation, route }) => {
     if (remainingWords.length === 0) {
       if (round === 3) {
         console.log('navigating to results')
+        //TODO: FIND WAY TO SORT 
         navigation.navigate("Results", { playersAndScores: tempPlayersWithScores });
       } else {
         setRound(round + 1);
@@ -313,20 +279,6 @@ const Round = ({ navigation, route }) => {
         </TouchableOpacity>
       </View>
     );
-  // if (phase === "teamResults")
-  // return (
-  //   <View style={styles.container}>
-  //     <Text style={styles.headerText}>Final Score: {score}</Text>
-  //     <TouchableOpacity
-  //       style={{ margin: 20 }}
-  //       onPress={() => {
-  //         startPassPhase()
-  //       }}
-  //     >
-  //       <Text style={styles.headerText}>Next</Text>
-  //     </TouchableOpacity>
-  //   </View>
-  // );
 };
 
 export default Round;
