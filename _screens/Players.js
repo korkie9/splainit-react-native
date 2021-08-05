@@ -98,7 +98,8 @@ const Players = ({ navigation, route }) => {
           navigation.navigate("Words", {
             players: players,
             wordsPerPlayer: wordsPerPlayer,
-            noOfTeams: teamNames.length
+            noOfTeams: teamNames.length,
+            teamNames: teamNames
           })
         }
         }

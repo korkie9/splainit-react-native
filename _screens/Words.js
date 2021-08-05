@@ -12,6 +12,7 @@ const Words = ({ navigation, route }) => {
   const wordsPerPlayer = route.params.wordsPerPlayer;
   const players = route.params.players;
   const noOfTeams = route.params.noOfTeams
+  const teamNames = route.params.teamNames
   const [words, setWords] = useState([]);
   const [playerIndex, setPlayerIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
@@ -133,7 +134,7 @@ const Words = ({ navigation, route }) => {
         disabled={next ? false : true}
         onPress={() => {
           const sortedplayers = sortedPlayers()
-         navigation.navigate('Round', {playersAndPartners: sortedplayers, words: words})
+         navigation.navigate('Round', {playersAndPartners: sortedplayers, words: words, teamNames: teamNames})
         }}
       >
         <Text style={styles.buttonText}>Start</Text>
@@ -230,6 +231,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgb(130, 22, 22)",
     alignItems: "center",
+    justifyContent: "center"
   },
   header: {
     fontSize: 30,

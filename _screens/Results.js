@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,10 +10,14 @@ import {
 } from "react-native";
 
 const Results = ({ navigation, route }) => {
-    const playersAndScores = route.params.playersAndScores
+  const teamsAndScores = route.params.teamsAndScores
+  //const [teamsAndScores, setTeamsAndScores] = useState([]);
+  const playersAndScores = route.params.playersAndScores;
+  
   return (
     <View style={styles.container}>
-        <Text>{JSON.stringify(playersAndScores)}</Text>
+      <Text>{JSON.stringify(playersAndScores)}</Text>
+      <Text>{JSON.stringify(teamsAndScores)}</Text>
     </View>
   );
 };
