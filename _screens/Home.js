@@ -32,13 +32,61 @@ const Home = ({ navigation }) => {
             { name: "P7", teamName: "T3" },
             { name: "P8", teamName: "T3" },
             { name: "P9", teamName: "T3" },
-          ]
-          const tns = ['T1', 'T2', 'T3']
-          const ws = ['w1', 'w1', 'w3', 'w4']
-          navigation.navigate('Words', {wordsPerPlayer: 2, players: ps, noOfTeams: 3, teamNames: tns})
+          ];
+          const tns = ["T1", "T2", "T3"];
+          const ws = ["w1", "w1", "w3", "w4"];
+          navigation.navigate("Words", {
+            wordsPerPlayer: 2,
+            players: ps,
+            noOfTeams: 3,
+            teamNames: tns,
+          });
         }}
       >
         <Text style={styles.buttonText}>Settings</Text>
+      </TouchableOpacity>
+      {/* To results button */}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          const pns = [
+            {
+              name: "P1",
+              roundOneScore: 1,
+              roundTwoScore: 3,
+              roundThreeScore: 0,
+            },
+            {
+              name: "P2",
+              roundOneScore: 1,
+              roundTwoScore: 3,
+              roundThreeScore: 0,
+            },
+            {
+              name: "P3",
+              roundOneScore: 1,
+              roundTwoScore: 3,
+              roundThreeScore: 0,
+            },
+            {
+              name: "P4",
+              roundOneScore: 1,
+              roundTwoScore: 3,
+              roundThreeScore: 0,
+            },
+          ];
+          const tns = [
+            {teamName: "T1", roundOneScore: 9, roundTwoScore: 0, roundThreeScore: 5},
+            {teamName: "T2", roundOneScore: 1, roundTwoScore: 4, roundThreeScore: 2},
+            {teamName: "T3", roundOneScore: 6, roundTwoScore: 0, roundThreeScore: 1},
+          ]
+          navigation.navigate("Results", {
+            playersAndScores: pns,
+            teamsAndScores: tns,
+          });
+        }}
+      >
+        <Text style={styles.buttonText}>Results</Text>
       </TouchableOpacity>
     </View>
   );
