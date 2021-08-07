@@ -12,11 +12,58 @@ import {
 } from "react-native";
 
 const Results = ({ navigation, route }) => {
-  const teamsAndScores = route.params.teamsAndScores;
+  const [teamsAndScores, setTeamsAndScores] = useState(
+    route.params.teamsAndScores
+  );
   const [phase, setPhase] = useState("playerPhase");
   const playersAndScores = route.params.playersAndScores;
 
   const setTeamPhase = () => {
+    let tempTeamsAndScores = [];
+    let highest1 = 0;
+    let highest2 = 0;
+    let highest3 = 0;
+    for (const team of teamsAndScores) {
+      if (team.roundOneScore > highest1) highest1 = team.roundOneScore;
+      if (team.roundTwoScore > highest2) highest2 = team.roundTwoScore;
+      if (team.roundThreeScore > highest3) highest3 = team.roundThreeScore;
+    }
+
+    for (const team of teamsAndScores) {
+      // const round1Result = team.roundOneScore === highest1 ? 'W' : 'L'
+      // const round2Result = team.roundTwoScore === highest2 ? 'W' : 'L'
+      // const round3Result = team.roundThreeScore === highest3 ? 'W' : 'L'
+      const tempTeamAndScores = {
+        teamName: team.teamName,
+        roundOneScore: team.roundOneScore,
+        roundTwoScore: team.roundTwoScore,
+        roundThreeScore: team.roundThreeScore,
+        roundOneResult: team.roundOneScore === highest1 ? "W" : "L",
+        roundTwoResult: team.roundTwoScore === highest2 ? "W" : "L",
+        roundThreeResult: team.roundThreeScore === highest3 ? "W" : "L",
+      };
+      tempTeamsAndScores.push(tempTeamAndScores);
+    }
+    let tempTeamsAndScoresWithGameScore = [];
+    for (const team of tempTeamsAndScores) {
+      let gameScore = 0;
+      if (team.roundOneResult === "W") gameScore++;
+      if (team.roundTwoResult === "W") gameScore++;
+      if (team.roundThreeResult === "W") gameScore++;
+      const tempTeamAndScores = {
+        teamName: team.teamName,
+        roundOneScore: team.roundOneScore,
+        roundTwoScore: team.roundTwoScore,
+        roundThreeScore: team.roundThreeScore,
+        roundOneResult: team.roundOneResult,
+        roundTwoResult: team.roundTwoResult,
+        roundThreeResult: team.roundThreeResult,
+        total: team.roundOneScore + team.roundTwoScore + team.roundThreeScore,
+        gameScore: gameScore,
+      };
+      tempTeamsAndScoresWithGameScore.push(tempTeamAndScores);
+    }
+    setTeamsAndScores(tempTeamsAndScoresWithGameScore);
     setPhase("teamPhase");
   };
   const playerCard = (p) => {
@@ -26,7 +73,14 @@ const Results = ({ navigation, route }) => {
     if (p.roundThreeScore) total += p.roundThreeScore;
     return (
       <View style={styles.itemCard}>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            borderTopRightRadius: 7,
+            borderTopLeftRadius: 7,
+          }}
+        >
           <Text
             style={{
               backgroundColor: "#bf3030",
@@ -55,7 +109,17 @@ const Results = ({ navigation, route }) => {
             {p.roundThreeScore ? p.roundThreeScore : "0"}
           </Text>
         </View>
-        <View style={styles.roundText}>
+        <View
+          style={{
+            fontFamily: "serif",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "black",
+            flexDirection: "row",
+            padding: 2,
+            backgroundColor: "#e6b5b5",
+          }}
+        >
           <Text style={{ flex: 1 }}>Total</Text>
           <Text style={{ flex: 1 }}>{total}</Text>
         </View>
@@ -63,13 +127,16 @@ const Results = ({ navigation, route }) => {
     );
   };
   const teamCard = (t) => {
-    let total = 0;
-    if (t.roundOneScore) total += t.roundOneScore;
-    if (t.roundTwoScore) total += t.roundTwoScore;
-    if (t.roundThreeScore) total += t.roundThreeScore;
     return (
       <View style={styles.itemCard}>
-        <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{
+            justifyContent: "center",
+            alignItems: "center",
+            borderTopRightRadius: 7,
+            borderTopLeftRadius: 7,
+          }}
+        >
           <Text
             style={{
               backgroundColor: "#bf3030",
@@ -85,22 +152,36 @@ const Results = ({ navigation, route }) => {
           <Text style={{ flex: 1 }}>
             {t.roundOneScore ? t.roundOneScore : "0"}
           </Text>
+          <Text style={{ flex: 1 }}>{t.roundOneResult}</Text>
         </View>
         <View style={styles.roundText}>
           <Text style={{ flex: 1 }}>Round 2</Text>
           <Text style={{ flex: 1 }}>
             {t.roundTwoScore ? t.roundTwoScore : "0"}
           </Text>
+          <Text style={{ flex: 1 }}>{t.roundTwoResult}</Text>
         </View>
         <View style={styles.roundText}>
           <Text style={{ flex: 1 }}>Round 3</Text>
           <Text style={{ flex: 1 }}>
             {t.roundThreeScore ? t.roundThreeScore : "0"}
           </Text>
+          <Text style={{ flex: 1 }}>{t.roundThreeResult}</Text>
         </View>
-        <View style={styles.roundText}>
+        <View
+          style={{
+            fontFamily: "serif",
+            justifyContent: "center",
+            alignItems: "center",
+            color: "black",
+            flexDirection: "row",
+            padding: 2,
+            backgroundColor: "#e6b5b5",
+          }}
+        >
           <Text style={{ flex: 1 }}>Total</Text>
-          <Text style={{ flex: 1 }}>{total}</Text>
+          <Text style={{ flex: 1 }}>{t.total}</Text>
+          <Text style={{ flex: 1 }}>{t.gameScore}</Text>
         </View>
       </View>
     );
