@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     margin: 20,
-    marginTop: 30,
+    marginTop: 60,
     textAlign: 'center',
     fontFamily: 'serif'
   },

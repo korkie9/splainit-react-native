@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -28,6 +28,13 @@ const Round = ({ navigation, route }) => {
   const [teamsAndScores, setTeamsAndScores] = useState([]);
   const [teamsAndRoundScore, setTeamsAndRoundScores] = useState([]);
   const [playersAndScores, setPlayersAndScores] = useState([]);
+
+  useEffect(() => {
+    return(() => {
+        clearInterval(gameCountDownInterval)
+        clearTimeout(gameCountDownTimeout)
+    })
+},[])
 
   const startCountDownToGame = () => {
     setPhase("countDownPhase");
@@ -63,7 +70,7 @@ const Round = ({ navigation, route }) => {
       clearInterval(interval);
       setPhase("resultsPhase");
       console.log("Game count down stoped, results phase initiate");
-    }, 30000);
+    }, 29000);
     setGameCountDownInterval(interval);
     setGameCountDownTimeout(timeout);
   };
@@ -200,7 +207,6 @@ const Round = ({ navigation, route }) => {
     if (remainingWords.length === 0) {
       if (round === 3) {
         console.log("navigating to results");
-        //TODO: FIND WAY TO SORT
         navigation.navigate("Results", {
           playersAndScores: tempPlayersWithScores,
           teamsAndScores: tempTeamsAndScores,
@@ -213,13 +219,18 @@ const Round = ({ navigation, route }) => {
     }
 
     if (!playersAndPartners[splainerNumber + 1]) {
-      if (round < 3) {
-        //Figure out who won round
-        console.log(playersAndScores);
-        setSplainerNumber(0);
-        setCountDownCounter(3);
-        startCountDownToGame();
-      }
+      // if (round < 3) {
+      //Figure out who won round
+      console.log(playersAndScores);
+      setSplainerNumber(0);
+      setCountDownCounter(3);
+      startCountDownToGame();
+      // } else {
+      //   console.log("the game continues")
+      //   setSplainerNumber(0)
+      //   setCountDownCounter(3);
+      //   startCountDownToGame();
+      // }
     } else {
       setSplainerNumber(splainerNumber + 1);
       setCountDownCounter(3);
@@ -243,9 +254,8 @@ const Round = ({ navigation, route }) => {
             onPress={() => {
               startCountDownToGame();
             }}
-            style={{ width: 200, backgroundColor: "#000000" }}
           >
-            <Text style={{ color: "#ffffff" }}>Start</Text>
+            <Text style={styles.nextButtonText}>Start</Text>
           </TouchableHighlight>
         </View>
       </View>
@@ -275,7 +285,7 @@ const Round = ({ navigation, route }) => {
             endRound();
           }}
         >
-          <AntDesign name="closecircle" size={24} color="black" />
+          <AntDesign name="closecircle" size={60} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>{countDownCounter}</Text>
         <Text style={styles.headerText}>Current Score: {score}</Text>
@@ -302,12 +312,12 @@ const Round = ({ navigation, route }) => {
       <View style={styles.container}>
         <Text style={styles.headerText}>Final Score: {score}</Text>
         <TouchableOpacity
-          style={{ margin: 20 }}
+          style={styles.startButton}
           onPress={() => {
             startPassPhase();
           }}
         >
-          <Text style={styles.headerText}>Next</Text>
+          <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
       </View>
     );
@@ -321,6 +331,12 @@ const styles = StyleSheet.create({
     backgroundColor: "rgb(130, 22, 22)",
     alignItems: "center",
     justifyContent: "center",
+  },
+  nextButtonText: {
+    fontWeight: "bold",
+    fontSize: 30,
+    color: "#ffffff",
+    fontFamily: "serif",
   },
   button: {
     color: "#ffffff",
@@ -365,5 +381,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 5,
     margin: 30,
-  }
+    width: 200,
+  },
 });

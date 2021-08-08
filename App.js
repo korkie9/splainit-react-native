@@ -19,6 +19,9 @@ const App = () => {
         headerMode="float"
         animation="fade"
         initialRouteName="Home"
+        screenOptions={{
+          headerShown: false
+        }}
       >
         <Stack.Screen name="Home" component={Home} />
         <Stack.Screen name="NewGame" component={NewGame} options={{title: 'Add Teams'}}/>
