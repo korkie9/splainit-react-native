@@ -235,7 +235,7 @@ const Round = ({ navigation, route }) => {
       setSplainerNumber(splainerNumber + 1);
       setCountDownCounter(3);
       setPhase("passPhase");
-    }
+    }      
     setScore(0);
     console.log(playersAndScores);
   };

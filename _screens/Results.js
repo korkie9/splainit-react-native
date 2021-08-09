@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
+import { AntDesign } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -17,8 +18,14 @@ const Results = ({ navigation, route }) => {
   );
   const [phase, setPhase] = useState("playerPhase");
   const playersAndScores = route.params.playersAndScores;
+  const [winners, setWinners] = useState([]);
+  const [trash, setTrash] = useState([]);
 
-  const setTeamPhase = () => {
+  useEffect(() => {
+    sortTeamsAndScores();
+  }, []);
+
+  const sortTeamsAndScores = () => {
     let tempTeamsAndScores = [];
     let highest1 = 0;
     let highest2 = 0;
@@ -44,12 +51,45 @@ const Results = ({ navigation, route }) => {
       };
       tempTeamsAndScores.push(tempTeamAndScores);
     }
+    let r1Wins = 0
+    let r2Wins = 0
+    let r3Wins = 0
+    tempTeamsAndScores.map((team) => {
+      team.roundOneResult === "W" && r1Wins++
+      team.roundTwoResult === "W" && r2Wins++
+      team.roundThreeResult === "W" && r3Wins++
+    });
+    let tempTeamsAndScoresWithDraws = []
+    let r1Result = ""
+    let r2Result = ""
+    let r3Result = ""
+    tempTeamsAndScores.map((team) => {
+      r1Result = team.roundOneResult
+      r2Result = team.roundTwoResult
+      r3Result = team.roundThreeResult
+      if(team.roundOneResult === "W" && r1Wins > 1) r1Result = "D"
+      if(team.roundTwoResult === "W" && r2Wins > 1) r2Result = "D"
+      if(team.roundThreeResult === "W" && r3Wins > 1) r3Result = "D"
+      const newTeam = {
+        teamName: team.teamName,
+        roundOneScore: team.roundOneScore,
+        roundTwoScore: team.roundTwoScore,
+        roundThreeScore: team.roundThreeScore,
+        roundOneResult: r1Result,
+        roundTwoResult: r2Result,
+        roundThreeResult: r3Result,
+      }
+      tempTeamsAndScoresWithDraws.push(newTeam)
+    });
     let tempTeamsAndScoresWithGameScore = [];
-    for (const team of tempTeamsAndScores) {
+    for (const team of tempTeamsAndScoresWithDraws) {
       let gameScore = 0;
       if (team.roundOneResult === "W") gameScore++;
       if (team.roundTwoResult === "W") gameScore++;
       if (team.roundThreeResult === "W") gameScore++;
+      if (team.roundOneResult === "D") gameScore += 0.5;
+      if (team.roundTwoResult === "D") gameScore += 0.5;
+      if (team.roundThreeResult === "D") gameScore += 0.5;
       const tempTeamAndScores = {
         teamName: team.teamName,
         roundOneScore: team.roundOneScore,
@@ -64,8 +104,15 @@ const Results = ({ navigation, route }) => {
       tempTeamsAndScoresWithGameScore.push(tempTeamAndScores);
     }
     setTeamsAndScores(tempTeamsAndScoresWithGameScore);
-    setPhase("teamPhase");
   };
+  const findWinners = () => {
+    let winningScore = 0;
+    // for(const team of teamsAndScores) {
+    //   if()
+    // }
+  };
+
+  const findTrash = () => {};
   const playerCard = (p) => {
     let total = 0;
     if (p.roundOneScore) total += p.roundOneScore;
@@ -196,14 +243,14 @@ const Results = ({ navigation, route }) => {
           renderItem={({ item }) => playerCard(item)}
           keyExtractor={(player) => player.name.toString()}
         />
-        <TouchableHighlight
+        <TouchableOpacity
           onPress={() => {
-            setTeamPhase();
+            setPhase("teamPhase");
           }}
-          style={styles.nextButton}
+          style={{ marginBottom: 50 }}
         >
-          <Text style={{ color: "#ffffff" }}>Next</Text>
-        </TouchableHighlight>
+          <AntDesign name="rightsquare" size={50} color="black" />
+        </TouchableOpacity>
       </View>
     );
   if (phase === "teamPhase")
@@ -216,9 +263,19 @@ const Results = ({ navigation, route }) => {
           renderItem={({ item }) => teamCard(item)}
           keyExtractor={(team) => team.teamName.toString()}
         />
-        <TouchableHighlight onPress={() => {}} style={styles.nextButton}>
-          <Text style={{ color: "#ffffff" }}>Next</Text>
-        </TouchableHighlight>
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={() => {
+              setPhase("playerPhase");
+            }}
+            style={{ marginBottom: 50 }}
+          >
+            <AntDesign name="leftsquare" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {}} style={{ marginBottom: 50 }}>
+            <AntDesign name="rightsquare" size={50} color="black" />
+          </TouchableOpacity>
+        </View>
       </View>
     );
 };
