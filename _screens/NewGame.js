@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { FontAwesome } from '@expo/vector-icons';
 import {
   StyleSheet,
   Text,
@@ -76,9 +77,9 @@ const NewGame = ({ navigation }) => {
   }
   const NextButton = () => {
     return (
-      <TouchableHighlight style={styles.nextButton} onPress={() => nextScreen()}>
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableHighlight>
+      <TouchableOpacity  style={{marginBottom: 20}} onPress={() => nextScreen()}>
+        <FontAwesome name="chevron-circle-right" size={70} color="black" />
+      </TouchableOpacity>
     )
   }
   return (

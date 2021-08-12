@@ -1,6 +1,12 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { AntDesign } from "@expo/vector-icons";
+import {
+  AntDesign,
+  Entypo,
+  MaterialCommunityIcons,
+  FontAwesome5,
+} from "@expo/vector-icons";
+
 import {
   StyleSheet,
   Text,
@@ -51,25 +57,25 @@ const Results = ({ navigation, route }) => {
       };
       tempTeamsAndScores.push(tempTeamAndScores);
     }
-    let r1Wins = 0
-    let r2Wins = 0
-    let r3Wins = 0
+    let r1Wins = 0;
+    let r2Wins = 0;
+    let r3Wins = 0;
     tempTeamsAndScores.map((team) => {
-      team.roundOneResult === "W" && r1Wins++
-      team.roundTwoResult === "W" && r2Wins++
-      team.roundThreeResult === "W" && r3Wins++
+      team.roundOneResult === "W" && r1Wins++;
+      team.roundTwoResult === "W" && r2Wins++;
+      team.roundThreeResult === "W" && r3Wins++;
     });
-    let tempTeamsAndScoresWithDraws = []
-    let r1Result = ""
-    let r2Result = ""
-    let r3Result = ""
+    let tempTeamsAndScoresWithDraws = [];
+    let r1Result = "";
+    let r2Result = "";
+    let r3Result = "";
     tempTeamsAndScores.map((team) => {
-      r1Result = team.roundOneResult
-      r2Result = team.roundTwoResult
-      r3Result = team.roundThreeResult
-      if(team.roundOneResult === "W" && r1Wins > 1) r1Result = "D"
-      if(team.roundTwoResult === "W" && r2Wins > 1) r2Result = "D"
-      if(team.roundThreeResult === "W" && r3Wins > 1) r3Result = "D"
+      r1Result = team.roundOneResult;
+      r2Result = team.roundTwoResult;
+      r3Result = team.roundThreeResult;
+      if (team.roundOneResult === "W" && r1Wins > 1) r1Result = "D";
+      if (team.roundTwoResult === "W" && r2Wins > 1) r2Result = "D";
+      if (team.roundThreeResult === "W" && r3Wins > 1) r3Result = "D";
       const newTeam = {
         teamName: team.teamName,
         roundOneScore: team.roundOneScore,
@@ -78,8 +84,8 @@ const Results = ({ navigation, route }) => {
         roundOneResult: r1Result,
         roundTwoResult: r2Result,
         roundThreeResult: r3Result,
-      }
-      tempTeamsAndScoresWithDraws.push(newTeam)
+      };
+      tempTeamsAndScoresWithDraws.push(newTeam);
     });
     let tempTeamsAndScoresWithGameScore = [];
     for (const team of tempTeamsAndScoresWithDraws) {
@@ -104,15 +110,44 @@ const Results = ({ navigation, route }) => {
       tempTeamsAndScoresWithGameScore.push(tempTeamAndScores);
     }
     setTeamsAndScores(tempTeamsAndScoresWithGameScore);
+    findWinners(tempTeamsAndScoresWithGameScore);
+    findTrash(tempTeamsAndScoresWithGameScore);
   };
-  const findWinners = () => {
-    let winningScore = 0;
-    // for(const team of teamsAndScores) {
-    //   if()
-    // }
-  };
+  const findWinners = (teams) => {
+    let mostWins = 0;
+    let mostPoints = 0;
+    teams.map((team) => {
+      if (team.gameScore > mostWins) mostWins = team.gameScore;
+    });
+    const tempTeamsAndWins = teams.filter(
+      (team) => team.gameScore === mostWins
+    );
 
-  const findTrash = () => {};
+    tempTeamsAndWins.map((team) => {
+      if (team.total > mostPoints) mostPoints = team.total;
+    });
+    const tempWinners = tempTeamsAndWins.filter(
+      (team) => team.total === mostPoints
+    );
+    setWinners(tempWinners);
+  };
+  const findTrash = (teams) => {
+    let leastWins = teams[0].gameScore;
+    let leastPoints = teams[0].total;
+    teams.map((team) => {
+      if (team.gameScore < leastWins) leastWins = team.gameScore;
+    });
+    const tempTeamsAndLosses = teams.filter(
+      (team) => team.gameScore === leastWins
+    );
+    tempTeamsAndLosses.map((team) => {
+      if (team.total < leastPoints) leastPoints = team.total;
+    });
+    const tempTrash = tempTeamsAndLosses.filter(
+      (team) => team.total === leastPoints
+    );
+    setTrash(tempTrash);
+  };
   const playerCard = (p) => {
     let total = 0;
     if (p.roundOneScore) total += p.roundOneScore;
@@ -180,8 +215,6 @@ const Results = ({ navigation, route }) => {
           style={{
             justifyContent: "center",
             alignItems: "center",
-            borderTopRightRadius: 7,
-            borderTopLeftRadius: 7,
           }}
         >
           <Text
@@ -272,8 +305,69 @@ const Results = ({ navigation, route }) => {
           >
             <AntDesign name="leftsquare" size={50} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => {}} style={{ marginBottom: 50 }}>
+          <TouchableOpacity
+            onPress={() => {
+              setPhase("winnerTrashPhase");
+            }}
+            style={{ marginBottom: 50 }}
+          >
             <AntDesign name="rightsquare" size={50} color="black" />
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  if (phase === "winnerTrashPhase")
+    return (
+      <View style={styles.container}>
+        {/*Winners */}
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.header}>Winners</Text>
+          <MaterialCommunityIcons
+            style={{ marginTop: 40 }}
+            name="medal"
+            size={40}
+            color="white"
+          />
+        </View>
+        <FlatList
+          data={winners}
+          renderItem={({ item }) => teamCard(item)}
+          keyExtractor={(team) => team.teamName.toString()}
+        />
+
+        {/*Losers */}
+        <View style={{ flexDirection: "row" }}>
+          <Text style={styles.header}>Trash</Text>
+          <Entypo
+            style={{ marginTop: 40 }}
+            name="trash"
+            size={40}
+            color="black"
+          />
+          <FontAwesome5
+            style={{ marginTop: 55 }}
+            name="poop"
+            size={24}
+            color="black"
+          />
+        </View>
+        <FlatList
+          data={trash}
+          renderItem={({ item }) => teamCard(item)}
+          keyExtractor={(team) => team.teamName.toString()}
+        />
+
+        <View style={{ flexDirection: "row" }}>
+          <TouchableOpacity
+            onPress={() => {
+              setPhase("teamPhase");
+            }}
+            style={{ marginBottom: 50 }}
+          >
+            <AntDesign name="leftsquare" size={50} color="black" />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => {navigation.navigate("Home", {})}} style={styles.nextButton}>
+            <Text style={styles.buttonText}>Finish</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -310,7 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     margin: 20,
-    marginTop: 30,
+    marginTop: 40,
     fontFamily: "serif",
     textAlign: "center",
   },
@@ -321,6 +415,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
-    margin: 15,
+    marginBottom: 50,
+    marginLeft: 10,
+  },
+  buttonText: {
+    fontWeight: "bold",
+    fontSize: 20,
+    color: "white",
   },
 });

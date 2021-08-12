@@ -1,6 +1,11 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { AntDesign } from "@expo/vector-icons";
+import {
+  AntDesign,
+  MaterialCommunityIcons,
+  Octicons,
+  FontAwesome5,
+} from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -30,11 +35,11 @@ const Round = ({ navigation, route }) => {
   const [playersAndScores, setPlayersAndScores] = useState([]);
 
   useEffect(() => {
-    return(() => {
-        clearInterval(gameCountDownInterval)
-        clearTimeout(gameCountDownTimeout)
-    })
-},[])
+    return () => {
+      clearInterval(gameCountDownInterval);
+      clearTimeout(gameCountDownTimeout);
+    };
+  }, []);
 
   const startCountDownToGame = () => {
     setPhase("countDownPhase");
@@ -235,40 +240,102 @@ const Round = ({ navigation, route }) => {
       setSplainerNumber(splainerNumber + 1);
       setCountDownCounter(3);
       setPhase("passPhase");
-    }      
+    }
     setScore(0);
     console.log(playersAndScores);
   };
-
+  const action = () => {
+    if (round === 1) return `'Splain`;
+    if (round === 2) return "Enact";
+    if (round === 3) return `Describe with one word `;
+  };
+  const Round = () => {
+    if (round === 1)
+      return (
+        <MaterialCommunityIcons
+          name="hand-pointing-up"
+          size={60}
+          color="black"
+        />
+      );
+    if (round === 2)
+      return (
+        <MaterialCommunityIcons
+          name="hand-peace-variant"
+          size={60}
+          color="black"
+        />
+      );
+    if (round === 3)
+      return (
+        <MaterialCommunityIcons name="hand-okay" size={60} color="black" />
+      );
+  };
   if (phase === "passPhase")
     return (
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.headerText}>Round: {round}</Text>
-          <Text style={styles.headerText}>Pass the phone to</Text>
-          <Text style={styles.headerText}>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 60,
+              color: "#000000",
+              fontFamily: "serif",
+            }}
+          >
+            Round: <Round />
+          </Text>
+          <View style={{ margin: 20, flexDirection: "row" }}>
+            <Octicons name="device-mobile" size={70} color="black" />
+            <AntDesign name="swapright" size={70} color="black" />
+            <MaterialCommunityIcons
+              name="human-greeting"
+              size={70}
+              color="black"
+            />
+          </View>
+          <Text
+            style={{
+              fontWeight: "bold",
+              fontSize: 80,
+              color: "white",
+              fontFamily: "serif",
+            }}
+          >
             {playersAndPartners[splainerNumber].partner}
           </Text>
-          <TouchableHighlight
-            style={styles.startButton}
+          <TouchableOpacity
+            style={{ margin: 20 }}
             onPress={() => {
               startCountDownToGame();
             }}
           >
-            <Text style={styles.nextButtonText}>Start</Text>
-          </TouchableHighlight>
+            <AntDesign name="play" size={80} color="black" />
+          </TouchableOpacity>
         </View>
       </View>
     );
   if (phase === "countDownPhase")
     return (
       <View style={styles.container}>
-        <Text style={styles.headerText}>Round Starts in...</Text>
         <Text
           style={{
             fontWeight: "bold",
-            fontSize: 50,
-            color: "#000000",
+            fontSize: 45,
+            color: "black",
+            justifyContent: "center",
+            textAlign: "center",
+            margin: 15,
+            fontFamily: "serif",
+          }}
+        >
+          Round Starts in...
+        </Text>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 70,
+            color: "white",
             fontFamily: "serif",
           }}
         >
@@ -285,16 +352,48 @@ const Round = ({ navigation, route }) => {
             endRound();
           }}
         >
-          <AntDesign name="closecircle" size={60} color="black" />
+          <AntDesign name="closecircle" size={70} color="black" />
         </TouchableOpacity>
         <Text style={styles.headerText}>{countDownCounter}</Text>
-        <Text style={styles.headerText}>Current Score: {score}</Text>
-        <Text style={styles.headerGameText}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 30,
+            color: "#000000",
+            fontFamily: "serif",
+            margin: 20,
+          }}
+        >
+          <FontAwesome5 name="clipboard-check" size={40} color="black" />{" "}
+          <Text style={{ color: "white" }}>{score}</Text>
+        </Text>
+        <Text style={styles.headerText}>
           {playersAndPartners[splainerNumber].partner}
         </Text>
-        <Text style={styles.headerGameText}>'splain</Text>
-        <Text style={styles.headerText}>{remainingWords[0]}</Text>
-        <Text style={styles.headerGameText}>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 30,
+            color: "#000000",
+            fontFamily: "serif",
+            margin: 20,
+            textAlign: "center",
+            justifyContent: "center",
+          }}
+        >
+          {action()}
+        </Text>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 30,
+            color: "white",
+            fontFamily: "serif",
+          }}
+        >
+          {remainingWords[0]}
+        </Text>
+        <Text style={styles.headerText}>
           to {playersAndPartners[splainerNumber].name}
         </Text>
         <TouchableOpacity
@@ -303,21 +402,31 @@ const Round = ({ navigation, route }) => {
             addPoint();
           }}
         >
-          <AntDesign name="checkcircle" size={60} color="black" />
+          <AntDesign name="checkcircle" size={70} color="black" />
         </TouchableOpacity>
       </View>
     );
   if (phase === "resultsPhase")
     return (
       <View style={styles.container}>
-        <Text style={styles.headerText}>Final Score: {score}</Text>
+        <Text
+          style={{
+            fontWeight: "bold",
+            fontSize: 100,
+            color: "white",
+            fontFamily: "serif",
+          }}
+        >
+          <FontAwesome5 name="clipboard-check" size={100} color="black" />{" "}
+          {score}
+        </Text>
         <TouchableOpacity
-          style={styles.startButton}
+          style={{ margin: 50, marginTop: 50}}
           onPress={() => {
             startPassPhase();
           }}
         >
-          <Text style={styles.nextButtonText}>Next</Text>
+          <AntDesign name="rightcircle" size={80} color="black" />
         </TouchableOpacity>
       </View>
     );
@@ -361,7 +470,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 40,
     color: "#000000",
     fontFamily: "serif",
   },
@@ -370,6 +479,9 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "grey",
     fontFamily: "serif",
+    margin: 20,
+    justifyContent: "center",
+    textAlign: "center",
   },
   startButton: {
     color: "#ffffff",

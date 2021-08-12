@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { FontAwesome } from '@expo/vector-icons';
 import {
   StyleSheet,
   View,
@@ -91,8 +92,8 @@ const Players = ({ navigation, route }) => {
 
   const NextButton = () => {
     return (
-      <TouchableHighlight
-        style={nextButtonStyle()}
+      <TouchableOpacity
+        style={{marginBottom: 20}}
         disabled={next ? false : true}
         onPress={() => {
           navigation.navigate("Words", {
@@ -104,8 +105,8 @@ const Players = ({ navigation, route }) => {
         }
         }
       >
-        <Text style={styles.buttonText}>Next</Text>
-      </TouchableHighlight>
+        <FontAwesome name="chevron-circle-right" size={70} color="black" />
+      </TouchableOpacity>
     );
   };
   const addName = () => {
@@ -170,7 +171,7 @@ const Players = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       {next ? (
-        <Text style={styles.header}>Click Next</Text>
+        <Text style={styles.header}>Your Players...</Text>
       ) : (
         <View style={{ flexDirection: "column" }}>
           <Text
@@ -228,7 +229,7 @@ const Players = ({ navigation, route }) => {
         renderItem={({ item }) => playerCard(item)}
         keyExtractor={(player) => player.name.toString()}
       />
-      <NextButton />
+      {next && <NextButton />}
     </View>
   );
 };

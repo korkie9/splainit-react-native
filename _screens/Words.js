@@ -1,25 +1,27 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
+import { AntDesign } from '@expo/vector-icons';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableHighlight,
+  TouchableOpacity,
 } from "react-native";
 
 const Words = ({ navigation, route }) => {
   const wordsPerPlayer = route.params.wordsPerPlayer;
   const players = route.params.players;
-  const noOfTeams = route.params.noOfTeams
-  const teamNames = route.params.teamNames
+  const noOfTeams = route.params.noOfTeams;
+  const teamNames = route.params.teamNames;
   const [words, setWords] = useState([]);
   const [playerIndex, setPlayerIndex] = useState(0);
   const [wordIndex, setWordIndex] = useState(0);
   const [wordCounter, setWordCounter] = useState(wordsPerPlayer);
   const [wordText, setWordText] = useState("");
   const [next, setNext] = useState(null); //To show button for next screen
-  const [ playersWithPartners, setPlayersWithPartners] = useState([])
+  const [playersWithPartners, setPlayersWithPartners] = useState([]);
 
   const addWord = () => {
     if (wordIndex !== wordsPerPlayer - 1) {
@@ -115,7 +117,8 @@ const Words = ({ navigation, route }) => {
             teamName: pplayer.teamName,
             partner: pteam[0].name,
           });
-        } else {//Edit here
+        } else {
+          //Edit here
           tempPlayersWithPartners.push({
             name: pplayer.name,
             teamName: pplayer.teamName,
@@ -129,16 +132,20 @@ const Words = ({ navigation, route }) => {
 
   const NextButton = () => {
     return next ? (
-      <TouchableHighlight
-        style={nextButtonStyle()}
+      <TouchableOpacity
+        style={{ alignItems: "center", justifyContent: "center", margin: 5 }}
         disabled={next ? false : true}
         onPress={() => {
-          const sortedplayers = sortedPlayers()
-         navigation.navigate('Round', {playersAndPartners: sortedplayers, words: words, teamNames: teamNames})
+          const sortedplayers = sortedPlayers();
+          navigation.navigate("Round", {
+            playersAndPartners: sortedplayers,
+            words: words,
+            teamNames: teamNames,
+          });
         }}
       >
-        <Text style={styles.buttonText}>Start</Text>
-      </TouchableHighlight>
+        <AntDesign name="play" size={70} color="black" />
+      </TouchableOpacity>
     ) : (
       <View></View>
     );
@@ -171,7 +178,8 @@ const Words = ({ navigation, route }) => {
               textAlign: "center",
             }}
           >
-            add {wordsPerPlayer} {wordsPerPlayer === 1 ? 'word or phrase' : 'words or phrases'}
+            add {wordsPerPlayer}{" "}
+            {wordsPerPlayer === 1 ? "word or phrase" : "words or phrases"}
           </Text>
           <Text
             style={{
@@ -183,7 +191,8 @@ const Words = ({ navigation, route }) => {
               textAlign: "center",
             }}
           >
-            {wordCounter} {wordCounter === 1 ? "word or phrase" : "words or phrases"} left
+            {wordCounter}{" "}
+            {wordCounter === 1 ? "word or phrase" : "words or phrases"} left
           </Text>
         </View>
       )}
@@ -223,7 +232,6 @@ const Words = ({ navigation, route }) => {
     </View>
   );
 };
-
 export default Words;
 
 const styles = StyleSheet.create({
@@ -231,7 +239,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "rgb(130, 22, 22)",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   header: {
     fontSize: 30,
