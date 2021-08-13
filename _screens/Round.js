@@ -1,10 +1,13 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
+import { Audio } from "expo-av";
 import {
   AntDesign,
   MaterialCommunityIcons,
   Octicons,
   FontAwesome5,
+  FontAwesome,
+  Entypo,
 } from "@expo/vector-icons";
 import {
   StyleSheet,
@@ -14,9 +17,14 @@ import {
   Alert,
   TouchableOpacity,
   TouchableHighlight,
+  TouchableWithoutFeedback
 } from "react-native";
+import countdown from "../assets/countdown.m4a";
+import ratata from "../assets/ratata.m4a";
+import yes from "../assets/yes.m4a";
 
 const Round = ({ navigation, route }) => {
+  const [sound, setSound] = useState();
   const [splainerNumber, setSplainerNumber] = useState(0);
   const playersAndPartners = route.params.playersAndPartners;
   const words = route.params.words;
@@ -33,15 +41,36 @@ const Round = ({ navigation, route }) => {
   const [teamsAndScores, setTeamsAndScores] = useState([]);
   const [teamsAndRoundScore, setTeamsAndRoundScores] = useState([]);
   const [playersAndScores, setPlayersAndScores] = useState([]);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [jBsounds, setJBSounds] = useState([
+    require("../assets/jbhah.m4a"),
+    require("../assets/jbhitme.m4a"),
+    require("../assets/jbho.m4a"),
+    require("../assets/jblowho.m4a"),
+    require("../assets/jbuh.m4a"),
+    require("../assets/jbwow.m4a"),
+    require("../assets/jbyew.m4a"),
+  ]);
 
   useEffect(() => {
-    return () => {
-      clearInterval(gameCountDownInterval);
-      clearTimeout(gameCountDownTimeout);
-    };
-  }, []);
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
+  async function playSound(track) {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(track);
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
   const startCountDownToGame = () => {
+    playSound(countdown);
     setPhase("countDownPhase");
     let c = 3;
     const interval = setInterval(() => {
@@ -52,16 +81,16 @@ const Round = ({ navigation, route }) => {
     setGameCountDownInterval(interval);
     setTimeout(() => {
       clearInterval(interval);
-      setCountDownCounter();
-      startGameCountDown();
-
       setCountDownCounter(30);
+      startGameCountDown(30);
+
+      //setCountDownCounter(30);
       console.log("count down stoped, gamephase initiate");
     }, 3000);
   };
-  const startGameCountDown = () => {
+  const startGameCountDown = (x) => {
     setPhase("gamePhase");
-    let c = 30;
+    let c = x;
     const interval = setInterval(() => {
       c -= 1;
       setCountDownCounter(c);
@@ -69,18 +98,30 @@ const Round = ({ navigation, route }) => {
         clearInterval(interval);
         setPhase("resultsPhase");
       }
-      // console.log(countDownCounter);
     }, 1000);
     const timeout = setTimeout(() => {
       clearInterval(interval);
+      playSound(ratata);
       setPhase("resultsPhase");
       console.log("Game count down stoped, results phase initiate");
-    }, 29000);
+    }, (x-1)*1000);
     setGameCountDownInterval(interval);
     setGameCountDownTimeout(timeout);
   };
+  const stopGameCountDown = () => {
+    clearInterval(gameCountDownInterval);
+    clearTimeout(gameCountDownTimeout);
+  };
+  const pauseOrPlay = () => {
+    if (isPlaying) {
+      setIsPlaying(false);
+      return stopGameCountDown();
+    }
+    setIsPlaying(true);
+    startGameCountDown(countDownCounter);
+  };
   const addPoint = () => {
-    //setCurrentWordNumber(generateRandomIntegerInRange(0, remainingWords.length - 1))
+    playSound(jBsounds[generateRandomIntegerInRange(0, jBsounds.length - 1)]);
     setScore(score + 1);
     const newWords = [];
     remainingWords.map((word, index) => {
@@ -88,7 +129,6 @@ const Round = ({ navigation, route }) => {
         newWords.push(word);
       }
     });
-    // console.log(newWords);
     setRemainingWords(newWords);
     if (!remainingWords[1]) {
       console.log("remaining are words finished");
@@ -354,7 +394,21 @@ const Round = ({ navigation, route }) => {
         >
           <AntDesign name="closecircle" size={70} color="black" />
         </TouchableOpacity>
-        <Text style={styles.headerText}>{countDownCounter}</Text>
+        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center",textAlign: "center" }}>
+          <Text style={styles.headerText}>{countDownCounter}</Text>
+          <TouchableWithoutFeedback
+            style={{ margin: 20 }}
+            onPress={() => {
+              pauseOrPlay();
+            }}
+          >
+            {isPlaying ? (
+              <FontAwesome5 name="pause" size={40} color="black" />
+            ) : (
+              <FontAwesome5 name="play" size={40} color="black" />
+            )}
+          </TouchableWithoutFeedback>
+        </View>
         <Text
           style={{
             fontWeight: "bold",
@@ -421,7 +475,7 @@ const Round = ({ navigation, route }) => {
           {score}
         </Text>
         <TouchableOpacity
-          style={{ margin: 50, marginTop: 50}}
+          style={{ margin: 50, marginTop: 50 }}
           onPress={() => {
             startPassPhase();
           }}
@@ -473,6 +527,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: "#000000",
     fontFamily: "serif",
+    margin: 10
   },
   headerGameText: {
     fontWeight: "bold",
