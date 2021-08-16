@@ -41,11 +41,7 @@ const Results = ({ navigation, route }) => {
       if (team.roundTwoScore > highest2) highest2 = team.roundTwoScore;
       if (team.roundThreeScore > highest3) highest3 = team.roundThreeScore;
     }
-
     for (const team of teamsAndScores) {
-      // const round1Result = team.roundOneScore === highest1 ? 'W' : 'L'
-      // const round2Result = team.roundTwoScore === highest2 ? 'W' : 'L'
-      // const round3Result = team.roundThreeScore === highest3 ? 'W' : 'L'
       const tempTeamAndScores = {
         teamName: team.teamName,
         roundOneScore: team.roundOneScore,

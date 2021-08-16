@@ -17,11 +17,12 @@ import {
   Alert,
   TouchableOpacity,
   TouchableHighlight,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import countdown from "../assets/countdown.m4a";
 import ratata from "../assets/ratata.m4a";
-import yes from "../assets/yes.m4a";
+import ohnose from "../assets/ohnose.m4a";
+import chicka from "../assets/chicka.m4a";
 
 const Round = ({ navigation, route }) => {
   const [sound, setSound] = useState();
@@ -50,6 +51,7 @@ const Round = ({ navigation, route }) => {
     require("../assets/jbuh.m4a"),
     require("../assets/jbwow.m4a"),
     require("../assets/jbyew.m4a"),
+    require("../assets/jbhey.m4a"),
   ]);
 
   useEffect(() => {
@@ -104,7 +106,7 @@ const Round = ({ navigation, route }) => {
       playSound(ratata);
       setPhase("resultsPhase");
       console.log("Game count down stoped, results phase initiate");
-    }, (x-1)*1000);
+    }, (x - 1) * 1000);
     setGameCountDownInterval(interval);
     setGameCountDownTimeout(timeout);
   };
@@ -153,6 +155,7 @@ const Round = ({ navigation, route }) => {
     });
   };
   const endRound = () => {
+    playSound(ohnose);
     clearInterval(gameCountDownInterval);
     clearTimeout(gameCountDownTimeout);
     setPhase("resultsPhase");
@@ -269,7 +272,8 @@ const Round = ({ navigation, route }) => {
       console.log(playersAndScores);
       setSplainerNumber(0);
       setCountDownCounter(3);
-      startCountDownToGame();
+      setPhase("passPhase");
+      //startCountDownToGame();
       // } else {
       //   console.log("the game continues")
       //   setSplainerNumber(0)
@@ -394,7 +398,14 @@ const Round = ({ navigation, route }) => {
         >
           <AntDesign name="closecircle" size={70} color="black" />
         </TouchableOpacity>
-        <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center",textAlign: "center" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+          }}
+        >
           <Text style={styles.headerText}>{countDownCounter}</Text>
           <TouchableWithoutFeedback
             style={{ margin: 20 }}
@@ -477,6 +488,7 @@ const Round = ({ navigation, route }) => {
         <TouchableOpacity
           style={{ margin: 50, marginTop: 50 }}
           onPress={() => {
+            playSound(chicka);
             startPassPhase();
           }}
         >
@@ -527,7 +539,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
     color: "#000000",
     fontFamily: "serif",
-    margin: 10
+    margin: 10,
   },
   headerGameText: {
     fontWeight: "bold",

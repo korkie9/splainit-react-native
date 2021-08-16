@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
 } from "react-native";
-import Round from "../_components/rounds/Round";
+//import Round from "../_components/rounds/Round";
 
 const GamePlay = ({ navigation, route }) => {
   const words = route.params.words;

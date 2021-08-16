@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -12,28 +12,49 @@ import {
   TextInput,
   FlatList,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { Audio } from 'expo-av';
+import yes from "../assets/yes.m4a";
+import ohnose from "../assets/ohnose.m4a"
+import skrr from "../assets/skrr.m4a"
 
 const NewGame = ({ navigation }) => {
   const [teams, setTeams] = useState([]);
   const [team, setTeam] = useState("");
+  const [sound, setSound] = useState();
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
 
+  const playSound = async (track) => {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(track);
+    setSound(sound);
+    console.log("Playing Sound");
+    await sound.playAsync();
+  };
   const addTeam = () => {
-    let teamExists = null
-    teams.map(t => {
-      if(t === team) teamExists = true
-    })
+    let teamExists = null;
+    teams.map((t) => {
+      if (t === team) teamExists = true;
+    });
     if (team && !teamExists) {
-     // const id = teams.length + 1;
+      playSound(yes)
+      // const id = teams.length + 1;
       setTeams([...teams, team]);
       setTeam("");
     } else {
-      Alert.alert('Please add a unique team name')
+      Alert.alert("Please add a unique team name");
     }
   };
   const removeTeam = (name) => {
-    const newTeams = teams.filter(team => team != name)
-    setTeams(newTeams)
+    playSound(ohnose)
+    const newTeams = teams.filter((team) => team != name);
+    setTeams(newTeams);
   };
   const onTeamChange = (team) => {
     setTeam(team);
@@ -53,35 +74,21 @@ const NewGame = ({ navigation }) => {
       </View>
     );
   };
-  const addButton = () =>
-    team
-      ? {
-          backgroundColor: "#000000",
-          height: 50,
-          width: 70,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-        }
-      : {
-          backgroundColor: "#616160",
-          height: 50,
-          width: 70,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-        };
   const nextScreen = () => {
-    if(teams.length < 2) return Alert.alert('Please add at least 2 teams')
-    navigation.navigate('PlayersPerTeam', {teams: teams})
-  }
+    if (teams.length < 2) return Alert.alert("Please add at least 2 teams");
+    playSound(skrr)
+    navigation.navigate("PlayersPerTeam", { teams: teams });
+  };
   const NextButton = () => {
     return (
-      <TouchableOpacity  style={{marginBottom: 20}} onPress={() => nextScreen()}>
+      <TouchableOpacity
+        style={{ marginBottom: 20 }}
+        onPress={() => nextScreen()}
+      >
         <FontAwesome name="chevron-circle-right" size={70} color="black" />
       </TouchableOpacity>
-    )
-  }
+    );
+  };
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Add Your Teams</Text>
@@ -94,9 +101,13 @@ const NewGame = ({ navigation }) => {
           textAlign="center"
           caretHidden={true}
         />
-        <TouchableHighlight onPress={addTeam} style={addButton()} disabled={team ? false : true}>
-          <Text style={{ color: "#ffffff" }}>Add</Text>
-        </TouchableHighlight>
+        <TouchableOpacity onPress={addTeam} disabled={team ? false : true}>
+          {team ? (
+            <AntDesign name="checkcircle" size={40} color="black" />
+          ) : (
+            <AntDesign name="checkcircle" size={40} color="grey" />
+          )}
+        </TouchableOpacity>
       </View>
       <FlatList
         data={teams}
@@ -122,8 +133,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     margin: 20,
     marginTop: 60,
-    fontFamily: 'serif',
-    textAlign: 'center'
+    fontFamily: "serif",
+    textAlign: "center",
   },
   nextButton: {
     color: "#ffffff",

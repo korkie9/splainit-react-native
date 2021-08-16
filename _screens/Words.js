@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { AntDesign } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import { AntDesign } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,9 @@ import {
   TouchableHighlight,
   TouchableOpacity,
 } from "react-native";
+import yes from "../assets/yes.m4a"
+import skrr from "../assets/skrr.m4a"
+import { Audio } from 'expo-av';
 
 const Words = ({ navigation, route }) => {
   const wordsPerPlayer = route.params.wordsPerPlayer;
@@ -22,8 +25,27 @@ const Words = ({ navigation, route }) => {
   const [wordText, setWordText] = useState("");
   const [next, setNext] = useState(null); //To show button for next screen
   const [playersWithPartners, setPlayersWithPartners] = useState([]);
+  const [sound, setSound] = useState();
 
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
+
+   const playSound = async (track) => {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(track);
+    setSound(sound);
+
+    console.log("Playing Sound");
+    await sound.playAsync();
+  }
   const addWord = () => {
+    playSound(yes)
     if (wordIndex !== wordsPerPlayer - 1) {
       setWords([...words, wordText]);
       setWordCounter(wordCounter - 1);
@@ -136,6 +158,7 @@ const Words = ({ navigation, route }) => {
         style={{ alignItems: "center", justifyContent: "center", margin: 5 }}
         disabled={next ? false : true}
         onPress={() => {
+          playSound(skrr)
           const sortedplayers = sortedPlayers();
           navigation.navigate("Round", {
             playersAndPartners: sortedplayers,
@@ -216,15 +239,18 @@ const Words = ({ navigation, route }) => {
               caretHidden={true}
               editable={next ? false : true}
             />
-            <TouchableHighlight
+            <TouchableOpacity
               onPress={() => {
                 addWord();
               }}
-              style={addButtonStyle()}
               disabled={wordText ? false : true}
             >
-              <Text style={{ color: "#ffffff" }}>Add</Text>
-            </TouchableHighlight>
+              {wordText ? (
+                <AntDesign name="checkcircle" size={40} color="black" />
+              ) : (
+                <AntDesign name="checkcircle" size={40} color="grey" />
+              )}
+            </TouchableOpacity>
           </View>
         )}
       </View>

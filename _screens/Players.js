@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { FontAwesome } from '@expo/vector-icons';
+import React, { useState, useEffect } from "react";
+import { FontAwesome, AntDesign } from "@expo/vector-icons";
 import {
   StyleSheet,
   View,
@@ -11,6 +11,10 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import yes from "../assets/yes.m4a"
+import skrr from "../assets/skrr.m4a"
+import { Audio } from 'expo-av';
+
 
 const Players = ({ navigation, route }) => {
   const teamNames = route.params.teams;
@@ -22,9 +26,24 @@ const Players = ({ navigation, route }) => {
   const [players, setPlayers] = useState([]); //Final list of players to be passed to next component { name, teamName}
   const [playerText, setPlayerText] = useState(""); //For input of player's name
   const [next, setNext] = useState(null); //To show button for next screen
-
+  const [sound, setSound] = useState();
+  useEffect(() => {
+    return sound
+      ? () => {
+          console.log("Unloading Sound");
+          sound.unloadAsync();
+        }
+      : undefined;
+  }, [sound]);
   const onPlayerTextChange = (player) => {
     setPlayerText(player);
+  };
+  const playSound = async (track) => {
+    console.log("Loading Sound");
+    const { sound } = await Audio.Sound.createAsync(track);
+    setSound(sound);
+    console.log("Playing Sound");
+    await sound.playAsync();
   };
 
   const playerCard = (p) => {
@@ -93,17 +112,17 @@ const Players = ({ navigation, route }) => {
   const NextButton = () => {
     return (
       <TouchableOpacity
-        style={{marginBottom: 20}}
+        style={{ marginBottom: 20 }}
         disabled={next ? false : true}
         onPress={() => {
+          playSound(skrr)
           navigation.navigate("Words", {
             players: players,
             wordsPerPlayer: wordsPerPlayer,
             noOfTeams: teamNames.length,
-            teamNames: teamNames
-          })
-        }
-        }
+            teamNames: teamNames,
+          });
+        }}
       >
         <FontAwesome name="chevron-circle-right" size={70} color="black" />
       </TouchableOpacity>
@@ -115,6 +134,7 @@ const Players = ({ navigation, route }) => {
       if (p.name === playerText) nameAlreadyExists = true;
     });
     if (!nameAlreadyExists && playerIndex !== playersPerTeam - 1) {
+      playSound(yes)
       setPlayers([
         ...players,
         { name: playerText, teamName: teamNames[teamIndex] },
@@ -122,6 +142,7 @@ const Players = ({ navigation, route }) => {
       setPlayerIndex(playerIndex + 1);
       setPlayerText("");
     } else if (!nameAlreadyExists && teamIndex !== teamNames.length - 1) {
+      playSound(yes)
       setPlayers([
         ...players,
         { name: playerText, teamName: teamNames[teamIndex] },
@@ -130,6 +151,7 @@ const Players = ({ navigation, route }) => {
       setTeamIndex(teamIndex + 1);
       setPlayerText("");
     } else if (!nameAlreadyExists) {
+      playSound(yes)
       setPlayers([
         ...players,
         { name: playerText, teamName: teamNames[teamIndex] },
@@ -211,15 +233,18 @@ const Players = ({ navigation, route }) => {
             caretHidden={true}
             editable={next ? false : true}
           />
-          <TouchableHighlight
+          <TouchableOpacity
             onPress={() => {
               addName();
             }}
-            style={addButtonStyle()}
             disabled={playerText ? false : true}
           >
-            <Text style={{ color: "#ffffff" }}>Add</Text>
-          </TouchableHighlight>
+            {playerText ? (
+              <AntDesign name="checkcircle" size={40} color="black" />
+            ) : (
+              <AntDesign name="checkcircle" size={40} color="grey" />
+            )}
+          </TouchableOpacity>
         </View>
       ) : (
         <View></View>
