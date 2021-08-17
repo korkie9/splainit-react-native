@@ -10,6 +10,7 @@ import Words from "./_screens/Words"
 import GamePlay from "./_screens/GamePlay"
 import Results from "./_screens/Results"
 import Round from "./_screens/Round"
+import DaRules from "./_screens/DaRules"
 const Stack = createStackNavigator();
 
 const App = () => {
@@ -32,6 +33,7 @@ const App = () => {
         <Stack.Screen name="GamePlay" component={GamePlay} options={{title: `'Splainit`}}/>
         <Stack.Screen name="Round" component={Round} options={{title: `'Splainit`}}/>
         <Stack.Screen name="Results" component={Results} options={{title: 'Results'}}/>
+        <Stack.Screen name="DaRules" component={DaRules} options={{title: 'DaRules'}}/>
 
       </Stack.Navigator>
     </NavigationContainer>

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,24 +8,66 @@ import {
   Alert,
   TouchableOpacity,
 } from "react-native";
+import GamePlayRules from "../_components/GamePlayRules";
+import GameRules from "../_components/GameRules";
 
 const DaRules = ({ navigation }) => {
-  const newGame = () => {
-    navigation.push("NewGame");
-  };
+  [screen, setScreen] = useState("GamePlay")
+
+  const ButtonStyle =  (thisScreen) => {
+    return screen === thisScreen ? 
+    {
+    color: "#ffffff",
+    margin: 5,
+    backgroundColor: "rgb(130, 22, 22)",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    flex: 1,
+    marginBottom: 20,
+    height: 40
+    } : {
+    color: "#ffffff",
+    margin: 5,
+    backgroundColor: "#000000",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 5,
+    flex: 1,
+    marginBottom: 20,
+    height: 40
+    }
+  }
   return (
     <View style={styles.container}>
-        <Text style={styles.header}>Game Rules</Text>
-        <Text style={styles.subHeader}>Game Rules</Text>
-        <Text style={styles.header}>Game Play</Text>
-        <Text style={styles.subHeader}>Step 1</Text>
-        <Text style={styles.paragraph}>Sort Players into equal teams</Text>
+      {screen === "GamePlay" && <GamePlayRules />}
+      {screen === "GameRules" && <GameRules />}
+      <View style={{flexDirection: "row"}}>
       <TouchableOpacity
         style={styles.button}
-        onPress={() => {navigation.navigate("Home")}}
+        onPress={() => {
+          navigation.navigate("Home");
+        }}
       >
-        <Text style={styles.buttonText}>Back</Text>
+        <Text style={styles.buttonText}>Home</Text>
       </TouchableOpacity>
+      <TouchableOpacity
+        style={ButtonStyle("GameRules")}
+        onPress={() => {
+          setScreen("GameRules");
+        }}
+      >
+        <Text style={styles.buttonText}>DaRules</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={ButtonStyle("GamePlay")}
+        onPress={() => {
+          setScreen("GamePlay");
+        }}
+      >
+        <Text style={styles.buttonText}>Game Play</Text>
+      </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -42,16 +84,17 @@ const styles = StyleSheet.create({
   button: {
     color: "#ffffff",
     margin: 5,
-    height: "10%",
-    width: "90%",
     backgroundColor: "#000000",
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 5,
+    flex: 1,
+    marginBottom: 20,
+    height: 40
   },
   buttonText: {
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 20,
     color: "white",
   },
   header: {

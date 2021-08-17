@@ -18,7 +18,14 @@ const Home = ({ navigation }) => {
       <TouchableOpacity style={styles.button} onPress={newGame}>
         <Text style={styles.buttonText}>New Game</Text>
       </TouchableOpacity>
-
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          navigation.push("DaRules");
+        }}
+      >
+        <Text style={styles.buttonText}>Da Rules</Text>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -76,10 +83,25 @@ const Home = ({ navigation }) => {
             },
           ];
           const tns = [
-            {teamName: "T1", roundOneScore: 9, roundTwoScore: 0, roundThreeScore: 5},
-            {teamName: "T2", roundOneScore: 1, roundTwoScore: 4, roundThreeScore: 2},
-            {teamName: "T3", roundOneScore: 6, roundTwoScore: 0, roundThreeScore: 1},
-          ]
+            {
+              teamName: "T1",
+              roundOneScore: 9,
+              roundTwoScore: 0,
+              roundThreeScore: 5,
+            },
+            {
+              teamName: "T2",
+              roundOneScore: 1,
+              roundTwoScore: 4,
+              roundThreeScore: 2,
+            },
+            {
+              teamName: "T3",
+              roundOneScore: 6,
+              roundTwoScore: 0,
+              roundThreeScore: 1,
+            },
+          ];
           navigation.navigate("Results", {
             playersAndScores: pns,
             teamsAndScores: tns,
