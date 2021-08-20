@@ -6,7 +6,6 @@ import {
   View,
   Text,
   TextInput,
-  TouchableHighlight,
   FlatList,
   TouchableOpacity,
   Alert,
@@ -80,35 +79,6 @@ const Players = ({ navigation, route }) => {
     );
   };
 
-  const nextScreen = () => {
-    if (teams.length < 2) return Alert.alert("Please add at least 2 teams");
-    navigation.navigate("PlayersPerTeam", { teams: teams });
-  };
-  const nextButtonStyle = () =>
-    next
-      ? {
-          color: "#ffffff",
-          margin: 5,
-          height: 55,
-          width: "30%",
-          backgroundColor: "#000000",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 5,
-          margin: 30,
-        }
-      : {
-          color: "#ffffff",
-          margin: 5,
-          height: 55,
-          width: "30%",
-          backgroundColor: "#616160",
-          alignItems: "center",
-          justifyContent: "center",
-          borderRadius: 5,
-          margin: 30,
-        };
-
   const NextButton = () => {
     return (
       <TouchableOpacity
@@ -129,15 +99,16 @@ const Players = ({ navigation, route }) => {
     );
   };
   const addName = () => {
+    if(!playerText.trim()) return Alert.alert("Please add a name")
     let nameAlreadyExists = null;
     players.map((p) => {
-      if (p.name === playerText) nameAlreadyExists = true;
+      if (p.name === playerText.trim()) nameAlreadyExists = true;
     });
     if (!nameAlreadyExists && playerIndex !== playersPerTeam - 1) {
       playSound(yes)
       setPlayers([
         ...players,
-        { name: playerText, teamName: teamNames[teamIndex] },
+        { name: playerText.trim(), teamName: teamNames[teamIndex] },
       ]);
       setPlayerIndex(playerIndex + 1);
       setPlayerText("");
@@ -145,7 +116,7 @@ const Players = ({ navigation, route }) => {
       playSound(yes)
       setPlayers([
         ...players,
-        { name: playerText, teamName: teamNames[teamIndex] },
+        { name: playerText.trim(), teamName: teamNames[teamIndex] },
       ]);
       setPlayerIndex(0);
       setTeamIndex(teamIndex + 1);
@@ -154,7 +125,7 @@ const Players = ({ navigation, route }) => {
       playSound(yes)
       setPlayers([
         ...players,
-        { name: playerText, teamName: teamNames[teamIndex] },
+        { name: playerText.trim(), teamName: teamNames[teamIndex] },
       ]);
       setNext(true);
       setPlayerText("");
@@ -162,24 +133,6 @@ const Players = ({ navigation, route }) => {
       Alert.alert("Please add a unique name");
     }
   };
-  const addButtonStyle = () =>
-    playerText
-      ? {
-          backgroundColor: "#000000",
-          height: 50,
-          width: 70,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-        }
-      : {
-          backgroundColor: "#616160",
-          height: 50,
-          width: 70,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-        };
   const playerInputStyle = () => {
     return {
       backgroundColor: "#ffffff",

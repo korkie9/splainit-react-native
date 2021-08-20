@@ -4,8 +4,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Alert,
   TouchableOpacity,
 } from "react-native";
 import GamePlayRules from "../_components/GamePlayRules";

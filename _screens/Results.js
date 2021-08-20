@@ -6,15 +6,11 @@ import {
   MaterialCommunityIcons,
   FontAwesome5,
 } from "@expo/vector-icons";
-
 import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Alert,
   TouchableOpacity,
-  TouchableHighlight,
   FlatList,
 } from "react-native";
 

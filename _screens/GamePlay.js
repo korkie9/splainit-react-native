@@ -4,26 +4,18 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Alert,
-  TouchableOpacity,
   TouchableHighlight,
 } from "react-native";
-//import Round from "../_components/rounds/Round";
 
 const GamePlay = ({ navigation, route }) => {
   const words = route.params.words;
-  // const players = route.params.players;
-  // const noOfTeams = route.params.noOfTeams;
   const playersAndPartners = route.params.playersAndPartners
   ////States for Starting
-  //const [isPassingPhone, setIsPassingPhone] = useState(true);
   const [countDownCounter, setCountDownCounter] = useState(3);
   const [teams, setTeams] = useState([]);
-  //const [playersWithPartners, setPlayersWithPartners] = useState([]);
   const [splainerNumber, setSplainerNumber] = useState(0);
   const [playersAndScores, setPlayersAndScores] = useState([]);
-  const [remainingWords, setRemainingWords] = useState(words); ///Words that are left to explain during round
+  const [remainingWords, setRemainingWords] = useState(words); 
 
   const [phase, setPhase] = useState("passPhase");
   const [score, setScore] = useState(0);
@@ -72,22 +64,11 @@ const GamePlay = ({ navigation, route }) => {
     setRemainingWords(rWords);
     setScore(score + 1);
   };
-  // const test = () => {
-  //   console.log(noOfTeams);
-  //   console.log(JSON.stringify(teams));
-  // };
   const finishRound = () => {
     const splainer = playersAndPartners[splainerNumber];
     if (round === 1) { //set the new score
       console.log(splainer)
-      // setPlayersAndScores([
-      //   ...playersAndScores,
-      //   {
-      //     name: splainer.name,
-      //     teamName: splainer.teamName,
-      //     score: score,
-      //   },
-      // ]);
+
     } else {
       const newPlayersAndScores = playersAndScores.map((player) =>
         player.name === splainer.name  //Map array and if name is === to current players name, set score
@@ -116,10 +97,7 @@ const GamePlay = ({ navigation, route }) => {
       });
     }
   };
-  // const startCountDownAndRoundPhase = () => {
-  //   setPhase("countDownPhase");
-  //   startCountDown(3, setPhase("roundPhase"));
-  // };
+
   const generateRandomIntegerInRange = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };

@@ -6,17 +6,13 @@ import {
   MaterialCommunityIcons,
   Octicons,
   FontAwesome5,
-  FontAwesome,
-  Entypo,
+
 } from "@expo/vector-icons";
 import {
   StyleSheet,
   Text,
   View,
-  Button,
-  Alert,
   TouchableOpacity,
-  TouchableHighlight,
   TouchableWithoutFeedback,
 } from "react-native";
 import countdown from "../assets/countdown.m4a";
@@ -34,13 +30,12 @@ const Round = ({ navigation, route }) => {
   const [countDownCounter, setCountDownCounter] = useState(3);
   const [phase, setPhase] = useState("passPhase");
   const [score, setScore] = useState(0);
-  const [currentWordNumber, setCurrentWordNumber] = useState(0);
+
   const [gameCountDownInterval, setGameCountDownInterval] = useState();
   const [gameCountDownTimeout, setGameCountDownTimeout] = useState();
   const [remainingWords, setRemainingWords] = useState(words);
   const [round, setRound] = useState(1);
-  const [teamsAndScores, setTeamsAndScores] = useState([]);
-  const [teamsAndRoundScore, setTeamsAndRoundScores] = useState([]);
+
   const [playersAndScores, setPlayersAndScores] = useState([]);
   const [isPlaying, setIsPlaying] = useState(true);
   const [jBsounds, setJBSounds] = useState([
@@ -267,19 +262,13 @@ const Round = ({ navigation, route }) => {
     }
 
     if (!playersAndPartners[splainerNumber + 1]) {
-      // if (round < 3) {
+
       //Figure out who won round
       console.log(playersAndScores);
       setSplainerNumber(0);
       setCountDownCounter(3);
       setPhase("passPhase");
-      //startCountDownToGame();
-      // } else {
-      //   console.log("the game continues")
-      //   setSplainerNumber(0)
-      //   setCountDownCounter(3);
-      //   startCountDownToGame();
-      // }
+
     } else {
       setSplainerNumber(splainerNumber + 1);
       setCountDownCounter(3);

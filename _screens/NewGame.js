@@ -5,9 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Button,
   Alert,
-  TouchableHighlight,
   TouchableOpacity,
   TextInput,
   FlatList,
@@ -38,14 +36,14 @@ const NewGame = ({ navigation }) => {
     await sound.playAsync();
   };
   const addTeam = () => {
+    if(!team.trim()) return Alert.alert("Please add a team")
     let teamExists = null;
     teams.map((t) => {
       if (t === team) teamExists = true;
     });
     if (team && !teamExists) {
       playSound(yes)
-      // const id = teams.length + 1;
-      setTeams([...teams, team]);
+      setTeams([...teams, team.trim()]);
       setTeam("");
     } else {
       Alert.alert("Please add a unique team name");

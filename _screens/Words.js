@@ -6,8 +6,8 @@ import {
   Text,
   View,
   TextInput,
-  TouchableHighlight,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import yes from "../assets/yes.m4a"
 import skrr from "../assets/skrr.m4a"
@@ -24,7 +24,6 @@ const Words = ({ navigation, route }) => {
   const [wordCounter, setWordCounter] = useState(wordsPerPlayer);
   const [wordText, setWordText] = useState("");
   const [next, setNext] = useState(null); //To show button for next screen
-  const [playersWithPartners, setPlayersWithPartners] = useState([]);
   const [sound, setSound] = useState();
 
   useEffect(() => {
@@ -45,20 +44,21 @@ const Words = ({ navigation, route }) => {
     await sound.playAsync();
   }
   const addWord = () => {
+    if(!wordText.trim()) return Alert.alert("Please add a word")
     playSound(yes)
     if (wordIndex !== wordsPerPlayer - 1) {
-      setWords([...words, wordText]);
+      setWords([...words, wordText.trim()]);
       setWordCounter(wordCounter - 1);
       setWordIndex(wordIndex + 1);
       setWordText("");
     } else if (playerIndex !== players.length - 1) {
-      setWords([...words, wordText]);
+      setWords([...words, wordText.trim()]);
       setWordIndex(0);
       setPlayerIndex(playerIndex + 1);
       setWordCounter(wordsPerPlayer);
       setWordText("");
     } else {
-      setWords([...words, wordText]);
+      setWords([...words, wordText.trim()]);
       setNext(true);
       setWordText("");
     }
@@ -80,36 +80,17 @@ const Words = ({ navigation, route }) => {
           height: 50,
           width: 200,
         };
-  const addButtonStyle = () =>
-    wordText
-      ? {
-          backgroundColor: "#000000",
-          height: 50,
-          width: 70,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-        }
-      : {
-          backgroundColor: "#616160",
-          height: 50,
-          width: 70,
-          borderRadius: 10,
-          justifyContent: "center",
-          alignItems: "center",
-        };
-  const nextButtonStyle = () => {
-    return {
-      color: "#ffffff",
-      margin: 5,
-      height: 55,
-      width: "30%",
-      backgroundColor: "#000000",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: 5,
-      margin: 30,
-    };
+
+  const shufflePlayers = (array) => {
+    let i = array.length - 1;
+    for (; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+    console.log(array)
+    return array;
   };
   const sortedPlayers = () => {
     //Sort array of players into array of teams array
@@ -149,7 +130,7 @@ const Words = ({ navigation, route }) => {
         }
       });
     });
-    return tempPlayersWithPartners;
+    return shufflePlayers(tempPlayersWithPartners);
   };
 
   const NextButton = () => {
@@ -162,7 +143,7 @@ const Words = ({ navigation, route }) => {
           const sortedplayers = sortedPlayers();
           navigation.navigate("Round", {
             playersAndPartners: sortedplayers,
-            words: words,
+            words: shufflePlayers(words),
             teamNames: teamNames,
           });
         }}
