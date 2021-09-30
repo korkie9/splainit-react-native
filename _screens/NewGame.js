@@ -11,9 +11,8 @@ import {
   FlatList,
 } from "react-native";
 import { Audio } from 'expo-av';
-import yes from "../assets/yes.m4a";
+import click from "../assets/click.m4a";
 import ohnose from "../assets/ohnose.m4a"
-import skrr from "../assets/skrr.m4a"
 
 const NewGame = ({ navigation }) => {
   const [teams, setTeams] = useState([]);
@@ -42,7 +41,7 @@ const NewGame = ({ navigation }) => {
       if (t === team) teamExists = true;
     });
     if (team && !teamExists) {
-      playSound(yes)
+      playSound(click)
       setTeams([...teams, team.trim()]);
       setTeam("");
     } else {
@@ -74,7 +73,7 @@ const NewGame = ({ navigation }) => {
   };
   const nextScreen = () => {
     if (teams.length < 2) return Alert.alert("Please add at least 2 teams");
-    playSound(skrr)
+    playSound(click)
     navigation.navigate("PlayersPerTeam", { teams: teams });
   };
   const NextButton = () => {

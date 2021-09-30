@@ -16,7 +16,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import countdown from "../assets/countdown.m4a";
-import ratata from "../assets/ratata.m4a";
+import time from "../assets/time.m4a";
 import ohnose from "../assets/ohnose.m4a";
 import chicka from "../assets/chicka.m4a";
 
@@ -38,16 +38,6 @@ const Round = ({ navigation, route }) => {
 
   const [playersAndScores, setPlayersAndScores] = useState([]);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [jBsounds, setJBSounds] = useState([
-    require("../assets/jbhah.m4a"),
-    require("../assets/jbhitme.m4a"),
-    require("../assets/jbho.m4a"),
-    require("../assets/jblowho.m4a"),
-    require("../assets/jbuh.m4a"),
-    require("../assets/jbwow.m4a"),
-    require("../assets/jbyew.m4a"),
-    require("../assets/jbhey.m4a"),
-  ]);
 
   useEffect(() => {
     return sound
@@ -98,7 +88,7 @@ const Round = ({ navigation, route }) => {
     }, 1000);
     const timeout = setTimeout(() => {
       clearInterval(interval);
-      playSound(ratata);
+      playSound(time);
       setPhase("resultsPhase");
       console.log("Game count down stoped, results phase initiate");
     }, (x - 1) * 1000);
@@ -118,7 +108,7 @@ const Round = ({ navigation, route }) => {
     startGameCountDown(countDownCounter);
   };
   const addPoint = () => {
-    playSound(jBsounds[generateRandomIntegerInRange(0, jBsounds.length - 1)]);
+    playSound(require("../assets/ding.m4a"));
     setScore(score + 1);
     const newWords = [];
     remainingWords.map((word, index) => {

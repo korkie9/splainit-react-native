@@ -10,8 +10,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import yes from "../assets/yes.m4a"
-import skrr from "../assets/skrr.m4a"
+import click from "../assets/click.m4a"
 import { Audio } from 'expo-av';
 
 
@@ -85,7 +84,7 @@ const Players = ({ navigation, route }) => {
         style={{ marginBottom: 20 }}
         disabled={next ? false : true}
         onPress={() => {
-          playSound(skrr)
+          playSound(click)
           navigation.navigate("Words", {
             players: players,
             wordsPerPlayer: wordsPerPlayer,
@@ -105,7 +104,7 @@ const Players = ({ navigation, route }) => {
       if (p.name === playerText.trim()) nameAlreadyExists = true;
     });
     if (!nameAlreadyExists && playerIndex !== playersPerTeam - 1) {
-      playSound(yes)
+      playSound(click)
       setPlayers([
         ...players,
         { name: playerText.trim(), teamName: teamNames[teamIndex] },
@@ -113,7 +112,7 @@ const Players = ({ navigation, route }) => {
       setPlayerIndex(playerIndex + 1);
       setPlayerText("");
     } else if (!nameAlreadyExists && teamIndex !== teamNames.length - 1) {
-      playSound(yes)
+      playSound(click)
       setPlayers([
         ...players,
         { name: playerText.trim(), teamName: teamNames[teamIndex] },
@@ -122,7 +121,7 @@ const Players = ({ navigation, route }) => {
       setTeamIndex(teamIndex + 1);
       setPlayerText("");
     } else if (!nameAlreadyExists) {
-      playSound(yes)
+      playSound(click)
       setPlayers([
         ...players,
         { name: playerText.trim(), teamName: teamNames[teamIndex] },

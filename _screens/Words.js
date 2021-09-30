@@ -9,8 +9,7 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import yes from "../assets/yes.m4a"
-import skrr from "../assets/skrr.m4a"
+import click from "../assets/click.m4a"
 import { Audio } from 'expo-av';
 
 const Words = ({ navigation, route }) => {
@@ -45,7 +44,7 @@ const Words = ({ navigation, route }) => {
   }
   const addWord = () => {
     if(!wordText.trim()) return Alert.alert("Please add a word")
-    playSound(yes)
+    playSound(click)
     if (wordIndex !== wordsPerPlayer - 1) {
       setWords([...words, wordText.trim()]);
       setWordCounter(wordCounter - 1);
@@ -139,7 +138,7 @@ const Words = ({ navigation, route }) => {
         style={{ alignItems: "center", justifyContent: "center", margin: 5 }}
         disabled={next ? false : true}
         onPress={() => {
-          playSound(skrr)
+          playSound(click)
           const sortedplayers = sortedPlayers();
           navigation.navigate("Round", {
             playersAndPartners: sortedplayers,
